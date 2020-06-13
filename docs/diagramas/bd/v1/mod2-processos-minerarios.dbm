@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="7"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="complexo_minerario" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="720" y="60"/>
+	<column name="id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nome" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<constraint name="complexo_minerario_pk" type="pk-constr" table="public.complexo_minerario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fluxo_trabalho" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1060" y="220"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="data_inicio" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="data_fim">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="fluxo_trabalho_pk" type="pk-constr" table="public.fluxo_trabalho">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tarefa" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1080" y="560"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="data_inicio" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="data_fim">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="prioridade" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="fluxo_trabalho_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="tarefa_pk" type="pk-constr" table="public.tarefa">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="informe" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="720" y="360"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="tarefa_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="fluxo_trabalho_pk_cp" type="pk-constr" table="public.informe">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="produto" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="440" y="620"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="nome" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<constraint name="produto_pk" type="pk-constr" table="public.produto">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="liberacao_producao" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="380" y="260"/>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="produto_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="valor_tonelada" not-null="true">
+		<type name="decimal" length="17" precision="2"/>
+	</column>
+	<column name="quantidade_tonelada" not-null="true">
+		<type name="decimal" length="17" precision="3"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="liberacao_producao_pk" type="pk-constr" table="public.liberacao_producao">
+		<columns names="complexo_minerario_id,produto_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="complexo_minerario_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.fluxo_trabalho">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fluxo_trabalho_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.fluxo_trabalho" table="public.tarefa">
+	<columns names="fluxo_trabalho_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="tarefa_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tarefa" table="public.informe">
+	<columns names="tarefa_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="complexo_minerario_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.liberacao_producao">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="produto_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.produto" table="public.liberacao_producao">
+	<columns names="produto_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_fluxo_trabalho_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.fluxo_trabalho"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="82.1301" y="-60.8812"/>
+	</label>
+</relationship>
+
+<relationship name="rel_tarefa_fluxo_trabalho" type="relfk" layer="0"
+	 src-table="public.tarefa"
+	 dst-table="public.fluxo_trabalho" reference-fk="fluxo_trabalho_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="4.24561" y="-28.1266"/>
+	</label>
+</relationship>
+
+<relationship name="rel_fluxo_trabalho_cp_tarefa" type="relfk" layer="0"
+	 src-table="public.informe"
+	 dst-table="public.tarefa" reference-fk="tarefa_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-7.91795" y="-23.8083"/>
+	</label>
+</relationship>
+
+<relationship name="rel_liberacao_producao_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.liberacao_producao"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="82.6753" y="-1.31334"/>
+	</label>
+</relationship>
+
+<relationship name="rel_liberacao_producao_produto" type="relfk" layer="0"
+	 src-table="public.liberacao_producao"
+	 dst-table="public.produto" reference-fk="produto_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="8.52393" y="-37.4266"/>
+	</label>
+</relationship>
+
+</dbmodel>

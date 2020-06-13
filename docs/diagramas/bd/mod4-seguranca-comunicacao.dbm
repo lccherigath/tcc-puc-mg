@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="8"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="complexo_minerario" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="780" y="200"/>
+	<column name="id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nome" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="situacao_operacional" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[Situação operacional: (0) Em Construção (1) Em Operação (2) Desativada
+* Substitui o campo status]]></comment>
+	</column>
+	<constraint name="complexo_minerario_pk" type="pk-constr" table="public.complexo_minerario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="familia" layer="0" collapse-mode="2" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1160" y="480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="endereco" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="cep" not-null="true">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="lat" not-null="true">
+		<type name="decimal" length="17" precision="14"/>
+	</column>
+	<column name="long" not-null="true">
+		<type name="decimal" length="17" precision="14"/>
+	</column>
+	<column name="telefone" not-null="true">
+		<type name="varchar" length="11"/>
+	</column>
+	<column name="status" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[(0) Inativo (1) Ativo]]></comment>
+	</column>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="familia_pk" type="pk-constr" table="public.familia">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="morador" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1240" y="200"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="nome" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="cpf">
+		<type name="varchar" length="11"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="telefone">
+		<type name="varchar" length="11"/>
+	</column>
+	<column name="familia_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="morador_pk" type="pk-constr" table="public.morador">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="evento" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="520"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="tipo" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[(1) Simulação ou (2) Reunião]]></comment>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="ata">
+		<type name="text" length="0"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="evento_pk" type="pk-constr" table="public.evento">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="plano_evacuacao" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="520"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="url_documento" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="data_criacao" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="data_atualizacao">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="evento_pk_cp" type="pk-constr" table="public.plano_evacuacao">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="emergencia" layer="0" collapse-mode="2" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="300" y="500"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="descricao" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="dano_potencial" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[(0) Nulo (1) Baixo (2) Médio (3) Alto]]></comment>
+	</column>
+	<column name="risco" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[(0) Nulo (1) Baixo (2) Médio (3) Alto]]></comment>
+	</column>
+	<column name="nivel_emergencia" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[(0) Nulo (1) Baixo (2) Médio (3) Alto]]></comment>
+	</column>
+	<column name="estrutura_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="evento_pk_cp" type="pk-constr" table="public.emergencia">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="estrutura" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="300" y="200"/>
+	<column name="id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="tipo" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="situacao_operacional" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[Situação operacional: (0) Em Construção (1) Em Operação (2) Desativada
+* Substitui o campo status]]></comment>
+	</column>
+	<column name="complexo_minerario_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="estrutura_pk" type="pk-constr" table="public.estrutura">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="complexo_minerario_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.familia">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="familia_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.familia" table="public.morador">
+	<columns names="familia_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="complexo_minerario_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.evento">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="complexo_minerario_fk_cp" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.plano_evacuacao">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="estrutura_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.estrutura" table="public.emergencia">
+	<columns names="estrutura_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="complexo_minerario_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.complexo_minerario" table="public.estrutura">
+	<columns names="complexo_minerario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_familia_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.familia"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-19.332" y="-30.2266"/>
+	</label>
+</relationship>
+
+<relationship name="rel_morador_familia" type="relfk" layer="0"
+	 src-table="public.morador"
+	 dst-table="public.familia" reference-fk="familia_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="69.7987" y="-27.4266"/>
+	</label>
+</relationship>
+
+<relationship name="rel_evento_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.evento"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-39.852" y="9.77344"/>
+	</label>
+</relationship>
+
+<relationship name="rel_evento_cp_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.plano_evacuacao"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk_cp"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-38.4678" y="-50.2266"/>
+	</label>
+</relationship>
+
+<relationship name="rel_estrutura_complexo_minerario" type="relfk" layer="0"
+	 src-table="public.estrutura"
+	 dst-table="public.complexo_minerario" reference-fk="complexo_minerario_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_emergencia_estrutura" type="relfk" layer="0"
+	 src-table="public.emergencia"
+	 dst-table="public.estrutura" reference-fk="estrutura_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="56.3346" y="-18.8266"/>
+	</label>
+</relationship>
+
+</dbmodel>

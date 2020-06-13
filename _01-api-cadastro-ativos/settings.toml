@@ -1,0 +1,21 @@
+[default]
+DEBUG = false
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:12345678@172.18.0.2/mod1_ativos'
+SQLALCHEMY_TRACK_MODIFICATIONS = false
+SECRET_KEY = ''
+EXTENSIONS = [
+    'py_app.extensions.database',
+    'py_app.extensions.cross_origin',
+    'py_app.extensions.swagger',
+    'py_app.blueprints.rest_api'
+]
+
+[development]
+DEBUG = true
+# SQLALCHEMY_DATABASE_URI = ''
+
+[testing]
+# SQLALCHEMY_DATABASE_URI = ''
+
+[production]
+# SQLALCHEMY_DATABASE_URI = ''
