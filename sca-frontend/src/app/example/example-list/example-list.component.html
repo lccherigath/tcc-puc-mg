@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-12">
+
+    <button class="btn btn-success" routerLink="/example-form-add">Novo</button>
+
+    <table class="table" *ngIf="examples$ | async as examples; else loadingError">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Email</th>
+          <th scope="col">Nascimento</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let example of examples; let i = index">
+          <th scope="row">{{ i+1 }}</th>
+          <td>{{ example.nome }}</td>
+          <td>{{ example.email }}</td>
+          <td>{{ example.dataNascimento }}</td>
+          <td>
+            <button class="btn btn-info" (click)="onEdit(example.id)">Atualizar</button> &nbsp;
+            <button class="btn btn-danger" (click)="onEdit(example.id)">Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #loadingError>
+      <div *ngIf="error$ | async; else loading">
+        Erro ao buscar dados no servidor.
+      </div>
+      <ng-template #loading>
+        <p><span>Carregando...</span></p>
+      </ng-template>
+    </ng-template>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-12">
+    <button class="btn btn-success" (click)="showToastMessage('success')">Success</button> &nbsp;
+    <button class="btn btn-info" (click)="showToastMessage('info')">Info</button> &nbsp;
+    <button class="btn btn-danger" (click)="showToastMessage('error')">Error</button> &nbsp;
+    <button class="btn btn-warning" (click)="showToastMessage('warning')">Warning</button>
+  </div>
+</div>

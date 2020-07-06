@@ -59,3 +59,31 @@ insert into assoc_ativo_complexo
 values
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 18), (1, 19), (1, 20), (1, 21), (1, 22);
 
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Cadam S.A.', NULL, -0.893666666666667, -52.3789708333333, 'AP', 'Vitória do Jari', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Catalao', NULL, -18.1508408333333, -47.7821363888889, 'GO', 'Ouvidor', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Niobras Mineração Ltda', NULL, -18.14625, -47.8058890277778, 'GO', 'Ouvidor', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('J. G. de A. FERREIRA MINERADORA EIRELI', NULL, -6.58219444444444, -43.9662222222222, 'MA', 'Pastos Bons', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Mosaic Fertilizantes P&K S.A. Filial: Araxa', NULL, -19.6413527777778, -46.9738497222222, 'MG', 'Araxá', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Mineração Usiminas S.A.', NULL, -20.1253333333333, -44.4104722222222, 'MG', 'Mateus Leme', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Mineração Corumbaense Reunida Sa', NULL, -19.1919383333334, -57.6141859722223, 'MS', 'Corumbá', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Alta Floresta Gold Mineração Ltda.', NULL, -10.8024861111111, -55.1861555555556, 'MT', 'Nova Santa Helena', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Avb Mineração Ltda.', NULL, -6.24496527777778, -49.7465663888889, 'PA', 'Curionópolis', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('White Solder Metalurgia e Mineração - Sol Nascente', NULL, -9.62227777777778, -63.0608611111111, 'RO', 'Rio Crespo', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Cooperativa Mineradora dos Garimpeiros de Ariquemes', NULL, -11.1485833333333, -62.4274722222223, 'RO', 'Urupá', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Gabriella Mineração Ltda', NULL, -28.5772777777778, -49.4421944444444, 'SC', 'Siderópolis', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Uilson Romanha & Cia Ltda', NULL, -23.6590833333333, -48.0013988888889, 'SP', 'Itapetininga', 1);
+insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
+    values ('Geominas Minerações Ltda.', NULL, -11.6493277777778, -47.6761777777778, 'TO', 'Natividade', 1);

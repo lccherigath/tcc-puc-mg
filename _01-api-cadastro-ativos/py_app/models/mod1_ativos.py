@@ -66,6 +66,11 @@ class Categoria(db.Model):
         categoria['status'] = STATUS[categoria['status']]
         return categoria
 
+    def to_dict_with_assets(self):
+        categoria = self.to_dict()
+        categoria['ativos'] = [ativo.to_dict() for ativo in self.ativoes]
+        return categoria
+
 
 
 

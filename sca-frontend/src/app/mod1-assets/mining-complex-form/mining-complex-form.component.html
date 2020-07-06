@@ -1,0 +1,248 @@
+<h2>Novo Complexo Minerário</h2>
+
+<form>
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" class="form-control" name="nome" id="nome" pInputText />
+    <!--input
+      type="text"
+      class="form-control"
+      name="nome"
+      id="nome"
+      formControlName="nome"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('nome') || fieldTouched('nome')) && hasError('nome')
+      }"
+    /-->
+    <!--div class="invalid-feedback" *ngIf="hasError('nome')">
+      <span *ngIf="hasError('nome')['required']">
+        Por favor, informe um nome.
+      </span>
+      <span *ngIf="hasError('nome')['minlength']">
+        O nome deve ter no mínimo
+        {{ hasError("nome")["minlength"].requiredLength }} caracteres.
+      </span>
+      <span *ngIf="hasError('nome')['maxlength']">
+        O nome deve ter no máximo
+        {{ hasError("nome")["maxlength"].requiredLength }} caracteres.
+      </span>
+    </div-->
+  </div>
+
+  <div class="form-row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="uf">UF</label>
+        <select class="form-control" name="uf" id="uf" *ngIf="ufList" (change)="ufSelect($event.target.value)">
+        <!--select
+          class="form-control"
+          name="uf"
+          id="uf"
+          formControlName="uf"
+          [ngClass]="{
+            'is-invalid':
+              (fieldDirty('uf') || fieldTouched('uf')) && hasError('uf')
+          }"
+        -->
+          <option value="">Selecione</option>
+          <option *ngFor="let uf of ufList" [value]="[uf.id, uf.sigla]">{{ uf.nome }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="municipio">Município</label>
+        <select class="form-control" name="municipio" id="municipio" [disabled]="cityList ? false : true" (change)="citySelect($event.target.value)">
+        <!--select
+          class="form-control"
+          name="municipio"
+          id="municipio"
+          formControlName="municipio"
+          [ngClass]="{
+            'is-invalid':
+              (fieldDirty('municipio') || fieldTouched('municipio')) && hasError('municipio')
+          }"
+        -->
+          <option value="">Selecione</option>
+          <option *ngFor="let city of cityList" [value]="city.id">{{ city.nome }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Localização {{ miningComplexLatLng ? '['+(miningComplexLatLng[0]|number)+', '+(miningComplexLatLng[1]|number)+']' : '' }}</label>
+        <button class="btn btn-secondary form-control" (click)="displayMap = !displayMap" [disabled]="selectedUFgeojson ? false : true">
+          {{ displayMap ? 'Confirmar' : 'Abrir mapa' }} &nbsp;&nbsp;
+          <i class="fas fa-map-marked-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="displayMap">
+      <div class="form-group div-map">
+        <app-leaflet-map *ngIf="selectedUFgeojson"
+          [data]="[]"
+          [geojsonLayer]="selectedUFgeojson"
+          [layerBounds]="geojsonBounds"
+          [ufOrCity]="'city'"
+          (emitLatLng)="receiveLatLng($event)"
+          [complexMarkerLatLng]="miningComplexLatLng"
+        ></app-leaflet-map>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Situação Operacional</label> <br>
+
+    <div class="custom-control custom-radio custom-control-inline" *ngFor="let type of operationalSituationTypes">
+      <input
+        type="radio"
+        [id]="'situacao_operacional-complexo-' + type.name"
+        name="situacao_operacional"
+        class="custom-control-input"
+        [value]="type.value"
+        />
+        <!-- formControlName="situacao_operacional"
+        [ngClass]="{
+          'is-invalid':
+            (fieldDirty('situacao_operacional') || fieldTouched('situacao_operacional')) &&
+            hasError('situacao_operacional')
+        }" -->
+      <label class="custom-control-label" [for]="'situacao_operacional-complexo-' + type.name">
+        {{ type.label }}
+      </label>
+
+      <!--div class="invalid-feedback" *ngIf="hasError('situacao_operacional')">
+        <span *ngIf="hasError('situacao_operacional')['required']">
+          Por favor, selecione a Situação Operacional.
+        </span>
+      </div-->
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Estruturas</label>
+
+    <!-- <p-dataView #dvStructures [value]="miningComplex.estruturas" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="brand" [sortField]="sortField" [sortOrder]="sortOrder"> -->
+    <p-dataView #dvStructures [value]="structures" [paginator]="true" [rows]="4" paginatorPosition="bottom" layout="grid" emptyMessage="Nenhum item">
+
+      <p-header>
+          <div class="ui-helper-clearfix">
+
+            <div class="row">
+              <div class="col-12">
+                <button class="btn btn-secondary btn-min" (click)="showDialog()">
+                  Adicionar <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+      </p-header>
+
+      <ng-template let-structure let-i="index" pTemplate="gridItem">
+          <div style="padding:.5em" class="p-col-12 p-md-3">
+              <p-panel [style]="{'text-align':'center'}">
+                <p-header>
+                  <strong>{{ structure.tipo }}</strong> <br> {{ getOperationalSituationLabel(structure.situacao_operacional) }}
+                </p-header>
+                <!-- <div class="structure-detail">{{ getOperationalSituationLabel(structure.situacao_operacional) }}</div> -->
+                <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
+                <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
+                <button class="btn btn-secondary btn-min" (click)="showDialogEdit($event, structure)"><i class="fas fa-edit"></i></button> &nbsp;
+                <button class="btn btn-secondary btn-min" (click)="confirmDeletion($event, structure)"><i class="fas fa-trash-alt"></i></button>
+              </p-panel>
+          </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+
+  <div class="form-group" style="margin-bottom: 0;">
+    <label>Equipamentos</label>
+
+    <p-dataView #dvEquipments [value]="miningComplex.ativos" [paginator]="true" [rows]="4" paginatorPosition="bottom" layout="grid" emptyMessage="Nenhum item">
+
+      <p-header>
+          <div class="ui-helper-clearfix">
+
+            <div class="row">
+              <div class="col-12">
+                <button class="btn btn-secondary btn-min" (click)="showDialogEquipments()">
+                  Adicionar <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+      </p-header>
+
+      <ng-template let-structure pTemplate="gridItem">
+          <div style="padding:.5em" class="p-col-12 p-md-3">
+              <p-panel [style]="{'text-align':'center'}">
+                <p-header>
+                  {{ structure.tipo }} <br> {{structure.situacao_operacional}}
+                </p-header>
+                <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
+                <!-- <div class="structure-detail">{{structure.situacao_operacional}}</div> -->
+                <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
+                <button class="btn btn-secondary btn-min"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-secondary btn-min"><i class="fas fa-trash-alt"></i></button>
+              </p-panel>
+          </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+
+
+</form>
+
+<p-dialog
+  header="Nova Estrutura"
+  [(visible)]="displayDialogStructures"
+  [modal]="true"
+  [style]="{width: '80vw'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+  >
+
+  <app-structure-form
+    [structureEdit]="actualStructure"
+    (emitStructure)="receiveStructure($event)"
+  ></app-structure-form>
+
+  <p-footer>
+    <button class="btn btn-secondary btn-min" (click)="displayDialogStructures=false">Fechar <i class="fas fa-times"></i></button>
+    <!-- <button class="btn btn-info" (click)="displayDialogStructures=false">Confirmar</button> -->
+  </p-footer>
+</p-dialog>
+
+<p-dialog
+  header="Adicionar Equipamentos"
+  [(visible)]="displayDialogEquipments"
+  [modal]="true"
+  [style]="{width: '80vw'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+  >
+
+  <app-equipments-add
+  ></app-equipments-add>
+
+  <p-footer>
+    <button class="btn btn-secondary btn-min" (click)="displayDialogEquipments=false">Fechar <i class="fas fa-times"></i></button>
+    <!-- <button class="btn btn-info" (click)="displayDialogEquipments=false">Confirmar</button> -->
+  </p-footer>
+</p-dialog>
+
+
+
+<p-confirmDialog #cd icon="pi pi-exclamation-triangle">
+  <p-footer>
+      <button class="btn btn-secondary" (click)="cd.reject()">Cancelar <i class="fas fa-times"></i> </button>
+      <button class="btn btn-danger" (click)="cd.accept()">Confirmar <i class="fas fa-check"></i> </button>
+  </p-footer>
+</p-confirmDialog>

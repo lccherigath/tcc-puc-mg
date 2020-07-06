@@ -1,0 +1,12 @@
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <app-sidebar [openClose]="openClose"></app-sidebar>
+
+  <app-navbar (openCloseEmitter)="receiverOpenClose($event)"></app-navbar>
+  <!-- Page Content  -->
+  <div id="content" [ngClass]="{ 'active': openClose }">
+
+    <router-outlet></router-outlet>
+
+  </div>
+</div>

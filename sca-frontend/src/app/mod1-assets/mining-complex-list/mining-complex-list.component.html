@@ -1,0 +1,87 @@
+<h2>Complexos Minerários</h2>
+
+<div class="flex">
+  <div class="flex-item margin-right">
+    <div class="card card-height-100">
+      <div class="card-body card-body-map">
+        <app-leaflet-map
+          *ngIf="miningComplexItems"
+          [data]="miningComplexItems"
+          [geojsonLayer]="brazilGeoJSON"
+          [layerBounds]="geojsonBounds"
+          [ufOrCity]="'uf'"
+        ></app-leaflet-map>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-item margin-left">
+    <div class="card card-height-100">
+      <div class="card-header card-header-button">
+        <button
+          class="btn btn-secondary btn-new"
+          routerLink="/complexos-minerarios/novo"
+        >
+          Novo <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <div class="card-body card-body-table">
+        <div class="div-p-table">
+          <p-table
+            *ngIf="
+              miningComplexItems$ | async as miningComplexItems"
+            [value]="miningComplexItems"
+            styleClass="ui-table-customers"
+            [rowHover]="true"
+            [rows]="25"
+            [showCurrentPageReport]="true"
+            [paginator]="true"
+            currentPageReportTemplate="{first} até {last} de {totalRecords}"
+            [scrollable]="true" scrollHeight="flex"
+          >
+          <!-- [value]="miningComplexItems.results" -->
+          <!-- selectionMode="single" -->
+          <!-- (onRowSelect)="onRowSelect($event)" -->
+            <ng-template pTemplate="header">
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Município</th>
+                <th>Situação</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-miningComplexItem>
+              <!-- <tr class="ui-selectable-row" [pSelectableRow]="miningComplexItem"> -->
+              <tr class="ui-selectable-row">
+                <td>
+                  <span class="ui-column-title">ID</span>
+                  {{ miningComplexItem.id }}
+                </td>
+                <td>
+                  <span class="ui-column-title">Nome</span>
+                  {{ miningComplexItem.nome }}
+                </td>
+                <td>
+                  <span class="ui-column-title">Município</span>
+                  {{ miningComplexItem.municipio + '-' + miningComplexItem.uf }}
+                </td>
+                <td>
+                  <span class="ui-column-title">Situação</span>
+                  {{ miningComplexItem.situacao_operacional }}
+                </td>
+                <td>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="[miningComplexItem.id, 'agenda']"><i class="far fa-calendar-alt"></i></button>&nbsp;
+                  <button class="btn btn-secondary btn-sm" [routerLink]="[miningComplexItem.id]"><i class="fas fa-search-plus"></i></button>&nbsp;
+                  <!-- <button class="btn btn-secondary btn-sm" [routerLink]="[miningComplexItem.id, 'agenda']"><i class="fas fa-edit"></i></button> -->
+                </td>
+              </tr>
+
+            </ng-template>
+          </p-table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

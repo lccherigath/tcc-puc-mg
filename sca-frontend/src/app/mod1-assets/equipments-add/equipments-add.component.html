@@ -1,0 +1,40 @@
+<div class="equipment-container">
+  <p-accordion *ngIf="categories$ | async as categories">
+    <p-accordionTab *ngFor="let category of categories" [disabled]="category.ativos.length === 0">
+      <p-header>{{ category.nome }} ({{ category.ativos.length }})</p-header>
+
+        <p-dataView #dvAssets [value]="category.ativos" [paginator]="true" [rows]="4" paginatorPosition="bottom" layout="grid" emptyMessage="Nenhum item">
+
+          <ng-template let-asset pTemplate="gridItem">
+              <div style="padding:.5em" class="p-col-12 p-md-3">
+                  <p-panel [style]="{'text-align':'center'}">
+                    <p-header [style]="{'height':'60px'}">
+                       {{ asset.descricao }} (<strong>{{asset.quantidade}}</strong> disponíveis)
+                    </p-header>
+
+                    <!--div class="form-row">
+                      <div class="col-md-9">
+                        <input type="number" min="0" [max]="asset.quantidade" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <button class="btn btn-info form-control"><i class="fas fa-check"></i></button>
+                      </div>
+                    </div-->
+
+                    <div class="input-group mb-3">
+                      <input type="number" class="form-control" min="0" [max]="asset.quantidade" aria-describedby="button-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-info" type="button" id="button-addon2">
+                          <i class="fas fa-check"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </p-panel>
+              </div>
+          </ng-template>
+        </p-dataView>
+
+    </p-accordionTab>
+  </p-accordion>
+</div>

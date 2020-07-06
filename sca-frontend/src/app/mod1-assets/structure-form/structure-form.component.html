@@ -1,0 +1,271 @@
+<form autocomplete="off" [formGroup]="formStructure">
+
+  <div class="form-row">
+    <div class="col-md-6">
+      <!-- TIPO DE ESTRUTURA -->
+      <div class="form-group">
+        <label>Tipo</label> <br>
+
+        <div class="custom-control custom-radio" *ngFor="let type of structureTypes">
+          <input
+            type="radio"
+            [id]="type.name"
+            name="tipo"
+            class="custom-control-input"
+            [value]="type.value"
+            formControlName="tipo"
+            [ngClass]="{
+              'is-invalid':
+                (fieldDirty('tipo') || fieldTouched('tipo')) &&
+                hasError('tipo')
+            }"
+          />
+          <label class="custom-control-label" [for]="type.name">
+            {{ type.value }}
+          </label>
+
+          <div class="invalid-feedback" *ngIf="hasError('tipo')">
+            <span *ngIf="hasError('tipo')['required']">
+              Por favor, selecione um tipo.
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- TIPO DE ESTRUTURA -->
+    </div>
+
+    <div class="col-md-6">
+      <!-- SITUAÇÃO OPERACIONAL -->
+      <div class="form-group">
+        <label>Situação Operacional</label> <br>
+
+        <div class="custom-control custom-radio" *ngFor="let type of operationalSituationTypes">
+          <input
+            type="radio"
+            [id]="'situacao_operacional-' + type.name"
+            name="situacao_operacional"
+            class="custom-control-input"
+            [value]="type.value"
+            formControlName="situacao_operacional"
+            [ngClass]="{
+              'is-invalid':
+                (fieldDirty('situacao_operacional') || fieldTouched('situacao_operacional')) &&
+                hasError('situacao_operacional')
+            }"
+          />
+          <label class="custom-control-label" [for]="'situacao_operacional-' + type.name">
+            {{ type.label }}
+          </label>
+
+          <div class="invalid-feedback" *ngIf="hasError('situacao_operacional')">
+            <span *ngIf="hasError('situacao_operacional')['required']">
+              Por favor, selecione a Situação Operacional.
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- SITUAÇÃO OPERACIONAL -->
+
+    </div>
+  </div>
+
+  <!-- DESCRIÇÃO -->
+  <div class="form-group">
+    <label for="descricao">Descrição</label>
+    <input
+      type="text"
+      class="form-control"
+      name="descricao"
+      id="descricao"
+      formControlName="descricao"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('descricao') || fieldTouched('descricao')) && hasError('descricao')
+      }"
+    />
+    <div class="invalid-feedback" *ngIf="hasError('descricao')">
+      <span *ngIf="hasError('descricao')['minlength']">
+        A descrição deve ter no mínimo
+        {{ hasError("descricao")["minlength"].requiredLength }} caracteres.
+      </span>
+      <span *ngIf="hasError('descricao')['maxlength']">
+        A descrição deve ter no máximo
+        {{ hasError("descricao")["maxlength"].requiredLength }} caracteres.
+      </span>
+    </div>
+  </div>
+  <!-- DESCRIÇÃO -->
+
+  <!-- PAEBM -->
+  <div class="form-group">
+    <label for="paemb_url">Link para o Plano de Ação de Emergência para Barragens (PAEBM)</label>
+    <input
+      type="url"
+      placeholder="https://example.com"
+      class="form-control"
+      name="paemb_url"
+      id="paemb_url"
+      formControlName="paemb_url"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('paemb_url') || fieldTouched('paemb_url')) && hasError('paemb_url')
+      }"
+    />
+    <div class="invalid-feedback" *ngIf="hasError('paemb_url')">
+      <span *ngIf="hasError('paemb_url')['minlength']">
+        A descrição deve ter no mínimo
+        {{ hasError("paemb_url")["minlength"].requiredLength }} caracteres.
+      </span>
+      <span *ngIf="hasError('paemb_url')['maxlength']">
+        A descrição deve ter no máximo
+        {{ hasError("paemb_url")["maxlength"].requiredLength }} caracteres.
+      </span>
+    </div>
+  </div>
+  <!-- PAEBM -->
+
+  <!-- INSERIDA PNSB -->
+  <div class="form-group">
+    <div class="custom-control custom-checkbox">
+      <input
+        type="checkbox"
+        class="custom-control-input"
+        id="pnsb"
+        formControlName="inserida_pnsb"
+      />
+      <label class="custom-control-label" for="pnsb">
+        Inserida na Política Nacional de Segurança de Barragens?
+      </label>
+    </div>
+  </div>
+  <!-- INSERIDA PNSB -->
+
+  <div class="form-row">
+    <div class="col-md-4">
+      <!-- DPA -->
+      <div class="form-group">
+        <label>Dano Potencial Associado (DPA)</label> <br>
+
+        <div class="custom-control custom-radio" *ngFor="let level of levels">
+          <input
+            type="radio"
+            [id]="'dpa-' + level.name"
+            name="dpa"
+            class="custom-control-input"
+            [value]="level.value"
+            formControlName="dpa"
+            [ngClass]="{
+              'is-invalid':
+                (fieldDirty('dpa') || fieldTouched('dpa')) &&
+                hasError('dpa')
+            }"
+          />
+          <label class="custom-control-label" [for]="'dpa-' + level.name">
+            {{ level.label }}
+          </label>
+
+          <div class="invalid-feedback" *ngIf="hasError('dpa')">
+            <span *ngIf="hasError('dpa')['required']">
+              Por favor, selecione o Dano Potencial Associado.
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- DPA -->
+    </div>
+    <div class="col-md-4">
+      <!-- CRI -->
+      <div class="form-group">
+        <label>Categoria de Risco (CRI)</label> <br>
+
+        <div class="custom-control custom-radio" *ngFor="let level of levels">
+          <input
+            type="radio"
+            [id]="'cri-' + level.name"
+            name="cri"
+            class="custom-control-input"
+            [value]="level.value"
+            formControlName="cri"
+            [ngClass]="{
+              'is-invalid':
+                (fieldDirty('cri') || fieldTouched('cri')) &&
+                hasError('cri')
+            }"
+          />
+          <label class="custom-control-label" [for]="'cri-' + level.name">
+            {{ level.label }}
+          </label>
+
+          <div class="invalid-feedback" *ngIf="hasError('cri')">
+            <span *ngIf="hasError('cri')['required']">
+              Por favor, selecione a Categoria de Risco.
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- CRI -->
+    </div>
+
+    <div class="col-md-4">
+      <!-- NÍVEL DE EMERGÊNCIA -->
+      <div class="form-group">
+        <label>Nível de Emergência</label> <br>
+
+        <div class="custom-control custom-radio" *ngFor="let level of emergencyLevels">
+          <input
+            type="radio"
+            [id]="'nivel_emergencia-' + level.name"
+            name="nivel_emergencia"
+            class="custom-control-input"
+            [value]="level.value"
+            formControlName="nivel_emergencia"
+            [ngClass]="{
+              'is-invalid':
+                (fieldDirty('nivel_emergencia') || fieldTouched('nivel_emergencia')) &&
+                hasError('nivel_emergencia')
+            }"
+          />
+          <label class="custom-control-label" [for]="'nivel_emergencia-' + level.name">
+            {{ level.label }}
+          </label>
+
+          <div class="invalid-feedback" *ngIf="hasError('nivel_emergencia')">
+            <span *ngIf="hasError('nivel_emergencia')['required']">
+              Por favor, selecione o Nível de Emergência.
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- NÍVEL DE EMERGÊNCIA -->
+
+    </div>
+  </div>
+
+
+  <div class="form-group text-right">
+    <button
+      type="button"
+      class="btn btn-secondary btn-min"
+      (click)="onCancel()"
+    >
+      Limpar <i class="fas fa-undo-alt"></i>
+    </button>
+    <button
+      type="submit"
+      class="btn btn-info btn-min"
+      (click)="onSubmit()"
+      [disabled]="formStructure.invalid"
+    >
+      {{ structureEdit ? 'Atualizar' : 'Adicionar' }} <i class="fas" [ngClass]="{'fa-plus': !structureEdit, 'fa-edit': structureEdit}"></i>
+    </button>
+  </div>
+
+</form>
+
+<!-- {{ formStructure.value | json }} -->
+
+
+<!--p-footer>
+  <button class="btn btn-secondary" (click)="displayDialogMap=false">Cancelar</button>
+  <button class="btn btn-info" (click)="displayDialogMap=false">Confirmar</button>
+</p-footer-->

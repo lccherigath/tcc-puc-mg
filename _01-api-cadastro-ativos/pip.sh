@@ -26,3 +26,13 @@ LOGS
 SWAGGER
 AUTH
 PAGINAÇÃO
+
+
+CASOS DE USO
+
+Agendar manutenção
+Manter Complexo Minerário
+Manter barragem
+Manter mina
+Manter estrutura administrativa
+Notificar moradores
