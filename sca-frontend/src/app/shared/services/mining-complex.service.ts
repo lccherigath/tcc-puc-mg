@@ -6,7 +6,6 @@ import { tap, delay, take, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MiningComplex } from '../models/mining-complex';
 import { Asset } from '../models/asset';
-import { element } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +31,7 @@ export class MiningComplexService {
   listEquipments = () =>
     this.http.get<Asset[]>(`${this.API_HOST}/ativos/equipamentos`).pipe(
       map((element: any) => element.results),
-      tap(console.log),
+      // tap(console.log),
       take(1)
     );
 

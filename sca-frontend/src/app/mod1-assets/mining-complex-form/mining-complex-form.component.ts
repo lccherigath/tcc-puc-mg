@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ConfirmationService } from 'primeng/api';
 
@@ -18,23 +19,27 @@ import * as L from 'leaflet';
 })
 export class MiningComplexFormComponent implements OnInit {
 
+  formMiningComplex: FormGroup;
+
   displayDialogStructures = false;
   displayDialogEquipments = false;
   displayMap = false;
   operationalSituationTypes: any;
-  miningComplex = new MiningComplex();
   structures: any;
   structureIndex: number;
   actualStructure: Structure;
+
+  equipments = [];
 
   ufList: any;
   cityList: any;
   selectedUF: string;
   selectedUFgeojson: any;
   geojsonBounds: any;
-  miningComplexLatLng: any;
+  miningComplexLatLng = null;
 
   constructor(
+    private formBuilder: FormBuilder,
     private federatedUnitService: FederatedUnitService,
     private toastMessageService: ToastMessageService,
     private valueLabelsService: ValueLabelsService,
@@ -48,7 +53,29 @@ export class MiningComplexFormComponent implements OnInit {
 
     this.operationalSituationTypes = this.valueLabelsService.getOperationalSituation();
     this.structures = [];
+
+    this.createForm(new MiningComplex());
   }
+
+  createForm = (miningComplex: MiningComplex) =>
+    this.formMiningComplex = this.formBuilder.group({
+      id: [miningComplex.id],
+      nome: [miningComplex.nome, Validators.maxLength(250)],
+      uf: [miningComplex.uf, Validators.required],
+      // municipio: [{value: miningComplex.municipio, disabled: true}, Validators.required],
+      municipio: [miningComplex.municipio, Validators.required],
+      situacao_operacional: [miningComplex.situacao_operacional, Validators.required],
+      lat_long: [miningComplex.lat_long],
+      // lat_long: [this.miningComplexLatLng, Validators.required],
+      estruturas: [miningComplex.estruturas],
+      ativos: [miningComplex.ativos]
+    });
+
+  hasError = (field: string) => this.formMiningComplex.get(field).errors;
+
+  fieldTouched = (field: string) => this.formMiningComplex.get(field).touched;
+
+  fieldDirty = (field: string) => this.formMiningComplex.get(field).dirty;
 
   ufSelect = (e) => {
     // console.log(e);
@@ -63,11 +90,12 @@ export class MiningComplexFormComponent implements OnInit {
 
   citySelect = (e) => {
     // console.log(e);
+    const citySplit = e.split(',');
     this.federatedUnitService.getCityGeoJSON(this.selectedUF).subscribe(
       (geojson: any) => {
         // this.selectedUFgeojson = geojson;
         this.selectedUFgeojson = geojson.features.filter(
-          element => element.properties.id === e
+          element => element.properties.id === citySplit[0]
         );
         this.geojsonBounds = L.geoJSON(this.selectedUFgeojson).getBounds();
       },
@@ -101,10 +129,10 @@ export class MiningComplexFormComponent implements OnInit {
   }
 
   getOperationalSituationLabel = (value: number) => {
-    const label = this.operationalSituationTypes.filter(
+    const label = this.operationalSituationTypes.find(
       (element: any) => element.value === value
     );
-    return label[0].label;
+    return label.label;
   }
 
   showDialogEdit(event: Event, structure: Structure) {
@@ -125,5 +153,49 @@ export class MiningComplexFormComponent implements OnInit {
         event.preventDefault();
       }
     });
+  }
+
+  receiveEquipment = (equipment: any, newQt?: number) => {
+    const equipmentExists = this.equipments.find(
+      (element: any) => element.assetId === equipment.assetId
+    );
+    if (equipmentExists) {
+      const index = this.equipments.indexOf(equipmentExists);
+      this.equipments[index].qt = newQt ? +newQt : equipment.qt;
+    } else {
+      this.equipments.push(equipment);
+    }
+    console.log(this.equipments);
+  }
+
+  onSubmit = () => {
+    if (this.formMiningComplex.valid) {
+      this.formMiningComplex.value.lat_long = this.miningComplexLatLng;
+      this.formMiningComplex.value.estruturas = this.structures;
+      this.formMiningComplex.value.ativos = this.equipments;
+      this.formMiningComplex.value.uf = this.formMiningComplex.value.uf.split(',')[1];
+      this.formMiningComplex.value.municipio = this.formMiningComplex.value.municipio.split(',')[1];
+      console.log(this.formMiningComplex.value);
+
+      // this.exampleService.save(this.formMiningComplex.value).subscribe(
+      //   success => {
+      //     this.toastMessageService.showMessage('success', '', `${this.formMiningComplex.value.id ? 'Atualizado' : 'Criado'} com sucesso!`);
+      //     this.location.back();
+      //   },
+      //   error => {
+      //     this.toastMessageService.showMessage('error', `Erro ${error.status}`, error.statusText);
+      //     console.error(error);
+      //   }
+      // );
+      // // this.formMiningComplex.reset();
+    }
+  }
+
+  onCancel = () => {
+    // this.submitted = false;
+    this.formMiningComplex.reset();
+    this.structures = [];
+    this.equipments = [];
+    this.miningComplexLatLng = undefined;
   }
 }

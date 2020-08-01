@@ -55,9 +55,9 @@ values
 ('Estrutura de apoio', 'Terminal', null, false, 3, 3, null, 2, 1, 1);
 
 insert into assoc_ativo_complexo
-    (complexo_minerario_id, ativo_id)
+    (complexo_minerario_id, ativo_id, quantidade)
 values
-(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 18), (1, 19), (1, 20), (1, 21), (1, 22);
+(1, 1, 6), (1, 2, 5), (1, 3, 7), (1, 4, 8), (1, 5, 9), (1, 6, 10), (1, 7, 11), (1, 8, 12), (1, 9, 5), (1, 10, 6), (1, 11, 7), (1, 12, 8), (1, 13, 9), (1, 14, 10), (1, 15, 11), (1, 16, 12), (1, 17, 13), (1, 18, 14), (1, 19, 15), (1, 20, 4), (1, 21, 3), (1, 22, 2);
 
 insert into complexo_minerario (nome,poligono,lat,long,uf,municipio,situacao_operacional)
     values ('Cadam S.A.', NULL, -0.893666666666667, -52.3789708333333, 'AP', 'Vitória do Jari', 1);

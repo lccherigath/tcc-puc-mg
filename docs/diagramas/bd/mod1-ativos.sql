@@ -91,7 +91,7 @@ CREATE TABLE public.estrutura (
 	inserida_pnsb boolean NOT NULL,
 	dpa smallint NOT NULL,
 	cri smallint NOT NULL,
-	paemb_url smallint,
+	paemb_url varchar(250),
 	nivel_emergencia smallint NOT NULL,
 	situacao_operacional smallint NOT NULL,
 	complexo_minerario_id integer NOT NULL,
@@ -119,6 +119,7 @@ COMMENT ON COLUMN public.estrutura.situacao_operacional IS E'Situação operacio
 CREATE TABLE public.assoc_ativo_complexo (
 	complexo_minerario_id integer NOT NULL,
 	ativo_id integer NOT NULL,
+	quantidade integer NOT NULL,
 	CONSTRAINT assoc_ativo_complexo_pk PRIMARY KEY (complexo_minerario_id,ativo_id)
 
 );

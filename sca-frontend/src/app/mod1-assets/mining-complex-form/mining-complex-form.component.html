@@ -1,10 +1,10 @@
 <h2>Novo Complexo Minerário</h2>
 
-<form>
+<form [formGroup]="formMiningComplex">
   <div class="form-group">
     <label for="nome">Nome</label>
-    <input type="text" class="form-control" name="nome" id="nome" pInputText />
-    <!--input
+    <!-- <input type="text" class="form-control" name="nome" id="nome" pInputText /> -->
+    <input
       type="text"
       class="form-control"
       name="nome"
@@ -14,59 +14,60 @@
         'is-invalid':
           (fieldDirty('nome') || fieldTouched('nome')) && hasError('nome')
       }"
-    /-->
-    <!--div class="invalid-feedback" *ngIf="hasError('nome')">
-      <span *ngIf="hasError('nome')['required']">
-        Por favor, informe um nome.
-      </span>
-      <span *ngIf="hasError('nome')['minlength']">
-        O nome deve ter no mínimo
-        {{ hasError("nome")["minlength"].requiredLength }} caracteres.
-      </span>
+    />
+    <div class="invalid-feedback" *ngIf="hasError('nome')">
       <span *ngIf="hasError('nome')['maxlength']">
         O nome deve ter no máximo
         {{ hasError("nome")["maxlength"].requiredLength }} caracteres.
       </span>
-    </div-->
+    </div>
   </div>
 
   <div class="form-row">
     <div class="col-md-4">
       <div class="form-group">
         <label for="uf">UF</label>
-        <select class="form-control" name="uf" id="uf" *ngIf="ufList" (change)="ufSelect($event.target.value)">
-        <!--select
+        <!-- <select class="form-control" name="uf" id="uf" *ngIf="ufList" (change)="ufSelect($event.target.value)"> -->
+        <select
+          *ngIf="ufList" (change)="ufSelect($event.target.value)"
           class="form-control"
-          name="uf"
-          id="uf"
-          formControlName="uf"
+          name="uf" id="uf" formControlName="uf"
           [ngClass]="{
             'is-invalid':
               (fieldDirty('uf') || fieldTouched('uf')) && hasError('uf')
           }"
-        -->
+        >
           <option value="">Selecione</option>
           <option *ngFor="let uf of ufList" [value]="[uf.id, uf.sigla]">{{ uf.nome }}</option>
         </select>
+        <div class="invalid-feedback" *ngIf="hasError('uf')">
+          <span *ngIf="hasError('uf')['required']">
+            Por favor, selecione a UF.
+          </span>
+        </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="form-group">
         <label for="municipio">Município</label>
-        <select class="form-control" name="municipio" id="municipio" [disabled]="cityList ? false : true" (change)="citySelect($event.target.value)">
-        <!--select
+        <!-- <select class="form-control" name="municipio" id="municipio" [disabled]="cityList ? false : true" (change)="citySelect($event.target.value)"> -->
+        <select
+          [disabled]="cityList ? false : true" (change)="citySelect($event.target.value)"
           class="form-control"
-          name="municipio"
-          id="municipio"
-          formControlName="municipio"
+          name="municipio" id="municipio" formControlName="municipio"
           [ngClass]="{
             'is-invalid':
               (fieldDirty('municipio') || fieldTouched('municipio')) && hasError('municipio')
           }"
-        -->
+        >
           <option value="">Selecione</option>
-          <option *ngFor="let city of cityList" [value]="city.id">{{ city.nome }}</option>
+          <option *ngFor="let city of cityList" [value]="[city.id, city.nome]">{{ city.nome }}</option>
         </select>
+        <div class="invalid-feedback" *ngIf="hasError('municipio')">
+          <span *ngIf="hasError('municipio')['required']">
+            Por favor, selecione o município.
+          </span>
+        </div>
       </div>
     </div>
     <div class="col-md-4">
@@ -103,22 +104,22 @@
         name="situacao_operacional"
         class="custom-control-input"
         [value]="type.value"
-        />
-        <!-- formControlName="situacao_operacional"
+        formControlName="situacao_operacional"
         [ngClass]="{
           'is-invalid':
             (fieldDirty('situacao_operacional') || fieldTouched('situacao_operacional')) &&
             hasError('situacao_operacional')
-        }" -->
+        }"
+        />
       <label class="custom-control-label" [for]="'situacao_operacional-complexo-' + type.name">
         {{ type.label }}
       </label>
 
-      <!--div class="invalid-feedback" *ngIf="hasError('situacao_operacional')">
+      <div class="invalid-feedback" *ngIf="hasError('situacao_operacional')">
         <span *ngIf="hasError('situacao_operacional')['required']">
           Por favor, selecione a Situação Operacional.
         </span>
-      </div-->
+      </div>
     </div>
   </div>
 
@@ -161,7 +162,7 @@
   <div class="form-group" style="margin-bottom: 0;">
     <label>Equipamentos</label>
 
-    <p-dataView #dvEquipments [value]="miningComplex.ativos" [paginator]="true" [rows]="4" paginatorPosition="bottom" layout="grid" emptyMessage="Nenhum item">
+    <p-dataView #dvEquipments [value]="equipments" [paginator]="true" [rows]="4" paginatorPosition="bottom" layout="grid" emptyMessage="Nenhum item">
 
       <p-header>
           <div class="ui-helper-clearfix">
@@ -176,22 +177,56 @@
           </div>
       </p-header>
 
-      <ng-template let-structure pTemplate="gridItem">
-          <div style="padding:.5em" class="p-col-12 p-md-3">
-              <p-panel [style]="{'text-align':'center'}">
-                <p-header>
-                  {{ structure.tipo }} <br> {{structure.situacao_operacional}}
-                </p-header>
-                <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
-                <!-- <div class="structure-detail">{{structure.situacao_operacional}}</div> -->
-                <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
-                <button class="btn btn-secondary btn-min"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-secondary btn-min"><i class="fas fa-trash-alt"></i></button>
-              </p-panel>
-          </div>
+      <ng-template let-asset pTemplate="gridItem">
+        <div style="padding:.5em" class="p-col-12 p-md-3">
+          <p-panel [style]="{'text-align':'center'}">
+            <p-header [style]="{'height':'60px'}">
+                {{ asset.assetDescription }}
+            </p-header>
+
+            <div class="input-group">
+              <input
+                #btnEquipment
+                type="number"
+                class="form-control"
+                min="0"
+                [value]="asset.qt"
+                [attr.aria-describedby]="'button-addon' + '_' + asset.assetId"
+              >
+              <div class="input-group-append">
+                <button
+                  class="btn btn-info"
+                  type="button"
+                  [id]="'button-addon' + '_' + asset.assetId"
+                  (click)="receiveEquipment(asset, btnEquipment.value)"
+                >
+                  <i class="fas fa-check"></i>
+                </button>
+              </div>
+            </div>
+
+          </p-panel>
+        </div>
       </ng-template>
+
     </p-dataView>
   </div>
+
+  <button
+    type="button"
+    class="btn btn-secondary mt-4"
+    (click)="onCancel()"
+  >
+    Limpar <i class="fas fa-undo-alt"></i>
+  </button>
+  <button
+    type="submit"
+    class="btn btn-info mt-4 ml-2"
+    [disabled]="formMiningComplex.invalid || miningComplexLatLng===null"
+    (click)="onSubmit()"
+    >
+    Salvar <i class="fas fa-check"></i>
+  </button>
 
 
 </form>
@@ -230,6 +265,7 @@
   >
 
   <app-equipments-add
+    (emitEquipment)="receiveEquipment($event)"
   ></app-equipments-add>
 
   <p-footer>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ import { Category } from 'src/app/shared/models/category';
 export class EquipmentsAddComponent implements OnInit {
 
   categories$: Observable<Category[]>;
+  @Output() emitEquipment = new EventEmitter();
 
   constructor(
     private miningComplexService: MiningComplexService
@@ -22,5 +23,8 @@ export class EquipmentsAddComponent implements OnInit {
     this.categories$ = this.miningComplexService.listEquipments()
       .pipe(take(1));
   }
+
+  addEquipment = (assetId: number, assetDescription: string, qt: number) =>
+    this.emitEquipment.emit({ assetId, assetDescription, qt: +qt });
 
 }

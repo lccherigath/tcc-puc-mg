@@ -8,23 +8,26 @@
           <ng-template let-asset pTemplate="gridItem">
               <div style="padding:.5em" class="p-col-12 p-md-3">
                   <p-panel [style]="{'text-align':'center'}">
-                    <p-header [style]="{'height':'60px'}">
-                       {{ asset.descricao }} (<strong>{{asset.quantidade}}</strong> disponíveis)
+                    <p-header [style]="{'height':'60px', 'font-size':'.7rem'}">
+                       {{ asset.descricao }} (<strong>{{asset.quantidade - btn.value}}</strong> disponíveis)
                     </p-header>
 
-                    <!--div class="form-row">
-                      <div class="col-md-9">
-                        <input type="number" min="0" [max]="asset.quantidade" class="form-control">
-                      </div>
-                      <div class="col-md-3">
-                        <button class="btn btn-info form-control"><i class="fas fa-check"></i></button>
-                      </div>
-                    </div-->
-
-                    <div class="input-group mb-3">
-                      <input type="number" class="form-control" min="0" [max]="asset.quantidade" aria-describedby="button-addon2">
+                    <div class="input-group">
+                      <input
+                      #btn
+                       type="number"
+                       class="form-control"
+                       min="0" [max]="asset.quantidade"
+                       [attr.aria-describedby]="'button-addon' + category.id + '_' + asset.id"
+                      >
                       <div class="input-group-append">
-                        <button class="btn btn-info" type="button" id="button-addon2">
+                        <button
+                          class="btn btn-info"
+                          type="button"
+                          [id]="'button-addon' + category.id + '_' + asset.id"
+                          (click)="addEquipment(asset.id, asset.descricao, btn.value)"
+                          >
+                          <!-- [disabled]="btn.value === '' || btn.value === '0'" -->
                           <i class="fas fa-check"></i>
                         </button>
                       </div>

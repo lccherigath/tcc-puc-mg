@@ -10,5 +10,6 @@ export class MiningComplex {
   situacao_operacional: string;
   lat_long: number[];
   estruturas: Structure[];
-  ativos: Asset[];
+  // ativos: Asset[];
+  ativos: any[];
 }
