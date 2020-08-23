@@ -1,1 +1,256 @@
-<p>mining-complex-details works!</p>
+
+<div class="flex flex-column" *ngIf="miningComplexItem$ | async as miningComplexItem; else loadingError">
+
+  <div class="flex-item">
+    <h2>{{ miningComplexItem.nome }}</h2>
+  </div>
+
+  <div class="flex-item flex flex-row kpi-cards" *ngIf="miningComplexProduction$ | async as miningComplexProduction">
+
+    <div class="flex-item margin-right" *ngFor="let prod of miningComplexProduction">
+      <div class="card">
+        <div class="card-body card-body-map card-kpi">
+          <span class="enlarged-font color-gray">{{ prod.product }}</span>
+          &nbsp;<span class="reduced-font">({{prod.period }})</span><br>
+          <span class="reduced-font">Produção: </span> <span class="enlarged-font-value color-brown">{{ prod.production }}</span> /
+          <span class="reduced-font">Volume vendas: </span> <span class="enlarged-font-value color-green">{{ prod.salesAmount }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flex-item flex flex-row fixed-height">
+
+    <div class="flex-item margin-right">
+      <div class="card card-height-100">
+        <div class="card-body card-body-map height-map">
+          <app-leaflet-map
+            *ngIf="miningComplexItem.poligono; else mapUnavailable"
+            [data]="miningComplexItem"
+            [geojsonLayer]="brazilGeoJSON"
+            [layerBounds]="geojsonBounds"
+            [ufOrCity]="'uf'"
+          ></app-leaflet-map>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-item margin-left">
+      <div class="card card-height-50 margin-bottom">
+        <div class="card-header card-header-button">
+          <button class="btn btn-secondary btn-sm" (click)="showDialogStructureEdit(null)">
+            <i class="fas fa-plus"></i>
+          </button>
+          <span class="table-title">&nbsp;Estruturas</span>
+        </div>
+
+        <div class="card-body card-body-table">
+          <div class="div-p-table">
+            <p-table
+              *ngIf="miningComplexItem.estruturas; else loadingError"
+              [value]="miningComplexItem.estruturas"
+              styleClass="ui-table-customers"
+              [rowHover]="true"
+              [rows]="6"
+              [showCurrentPageReport]="true"
+              [paginator]="true"
+              currentPageReportTemplate="{first} até {last} de {totalRecords}"
+              [scrollable]="true" scrollHeight="flex"
+            >
+            <!-- [value]="miningComplexItem.results" -->
+            <!-- selectionMode="single" -->
+            <!-- (onRowSelect)="onRowSelect($event)" -->
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Tipo</th>
+                  <th>
+                    DPA | CRI | NE <i class="fas fa-question-circle" [pTooltip]="tooltipText" tooltipPosition="top" hideDelay="2000"></i>
+                  </th>
+                  <th>Situação</th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-structure>
+                <!-- <tr class="ui-selectable-row" [pSelectableRow]="structure"> -->
+                <tr class="ui-selectable-row">
+                  <td>
+                    <span class="ui-column-title">Tipo</span>
+                    {{ structure.tipo }}
+                  </td>
+                  <td>
+                    <span class="ui-column-title">DPA | CRI | NE</span>
+                    {{ structure.nome }}
+                    <span class="badge" [ngClass]="selectBadgeClass(structure.dpa)">{{ selectLabelLevel(structure.dpa) }}</span>&nbsp;
+                    <span class="badge" [ngClass]="selectBadgeClass(structure.cri)">{{ selectLabelLevel(structure.cri) }}</span>&nbsp;
+                    <span class="badge" [ngClass]="selectBadgeClass(structure.nivel_emergencia)">{{ selectLabelLevel(structure.nivel_emergencia, 'emergency') }}</span>
+                  </td>
+                  <td>
+                    <span class="ui-column-title">Situação</span>
+                    {{ selectOperationalSituationLabel(structure.situacao_operacional) }}
+                  </td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm" (click)="showDialogStructureEdit(structure)"><i class="fas fa-edit"></i></button>
+                  </td>
+                </tr>
+
+              </ng-template>
+            </p-table>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card card-height-50">
+        <div class="card-header card-header-button">
+          <button class="btn btn-secondary btn-sm" (click)="displayDialogEquipments=true">
+            <i class="fas fa-plus"></i>
+          </button>
+          <span class="table-title">&nbsp;Equipamentos</span>
+        </div>
+
+        <div class="card-body card-body-table">
+          <div class="div-p-table">
+            <p-table
+              *ngIf="miningComplexItem.ativos; else loadingError"
+              [value]="miningComplexItem.ativos"
+              styleClass="ui-table-customers"
+              [rowHover]="true"
+              [rows]="6"
+              [showCurrentPageReport]="true"
+              [paginator]="true"
+              currentPageReportTemplate="{first} até {last} de {totalRecords}"
+              [scrollable]="true" scrollHeight="flex"
+            >
+            <!-- [value]="miningComplexItem.results" -->
+            <!-- selectionMode="single" -->
+            <!-- (onRowSelect)="onRowSelect($event)" -->
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Descrição</th>
+                  <th>Categoria</th>
+                  <th class="thead-qt">Qtd.</th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-asset let-i="rowIndex">
+                <!-- <tr class="ui-selectable-row" [pSelectableRow]="asset"> -->
+                <tr class="ui-selectable-row">
+                  <td>
+                    <span class="ui-column-title">Descrição</span>
+                    {{ asset.descricao }}
+                  </td>
+                  <td>
+                    <span class="ui-column-title">Categoria</span>
+                    {{ asset.categoria.nome }}
+                  </td>
+                  <td class="tbody-qt">
+                    <span class="ui-column-title">Qtd.</span>
+                    <!-- <span>{{ asset.quantidade }}</span> -->
+                    <input type="number" class="form-control" min="0" [max]="asset.quantidade_disponivel" [id]="'equipment_number_' + i" [value]="asset.quantidade" disabled="true">
+                  </td>
+                  <td>
+                    <!-- <button class="btn btn-secondary btn-sm" (click)="enableInput('equipment_number_' + i)"><i class="fas fa-edit"></i></button> -->
+                    <button
+                      class="btn btn-sm" [id]="'equipment_number_btn_' + i" (click)="enableInput('equipment_number_' + i, 'equipment_number_btn_' + i, asset.ativo_id, asset.quantidade)"
+                      [ngClass]="{'btn-secondary': currentBtnEquipmentId!=='equipment_number_btn_'+i, 'btn-info': currentBtnEquipmentId==='equipment_number_btn_'+i}"
+                    >
+                      <i class="fas" [ngClass]="{'fa-edit': currentBtnEquipmentId!=='equipment_number_btn_'+i, 'fa-check': currentBtnEquipmentId==='equipment_number_btn_'+i}"></i>
+                    </button>
+                  </td>
+                </tr>
+
+              </ng-template>
+            </p-table>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+<p-dialog
+  header="Nova Estrutura"
+  [(visible)]="displayDialogStructures"
+  [modal]="true"
+  [style]="{width: '80vw'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+  >
+
+  <app-structure-form
+    [structureEdit]="currentStructure"
+    (emitStructure)="receiveStructure($event)"
+  ></app-structure-form>
+
+  <p-footer>
+    <button class="btn btn-secondary btn-min" (click)="displayDialogStructures=false">Fechar <i class="fas fa-times"></i></button>
+    <!-- <button class="btn btn-info" (click)="displayDialogStructures=false">Confirmar</button> -->
+  </p-footer>
+</p-dialog>
+
+<p-dialog
+  header="Adicionar Equipamentos"
+  [(visible)]="displayDialogEquipments"
+  [modal]="true"
+  [style]="{width: '80vw'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+  >
+
+  <app-equipments-add
+    (emitEquipment)="receiveEquipment($event)"
+  ></app-equipments-add>
+
+  <p-footer>
+    <button class="btn btn-secondary btn-min" (click)="displayDialogEquipments=false">Fechar <i class="fas fa-times"></i></button>
+    <!-- <button class="btn btn-info" (click)="displayDialogEquipments=false">Confirmar</button> -->
+  </p-footer>
+</p-dialog>
+
+
+
+
+
+
+
+
+<ng-template #loadingError>
+  <div class="flex">
+    <div class="flex-item">
+      <div class="card card-height-100">
+        <div class="card-body">
+
+          <div *ngIf="error$ | async; else loading">
+            <app-error></app-error>
+          </div>
+          <ng-template #loading>
+            <app-loading></app-loading>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #mapUnavailable>
+  <div class="map-unavailable">
+    <i class="fas fa-map-marked-alt"></i>
+    <p>Mapa indisponível</p>
+  </div>
+</ng-template>

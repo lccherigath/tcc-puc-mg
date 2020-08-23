@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { DataViewModule } from 'primeng/dataview';
@@ -8,11 +10,8 @@ import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { AccordionModule } from 'primeng/accordion';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlatpickrModule } from 'angularx-flatpickr';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { TooltipModule } from 'primeng/tooltip';
+import { FullCalendarModule } from 'primeng/fullcalendar';
 
 import { Mod1AssetsRoutingModule } from './mod1-assets-routing.module';
 import { MiningComplexListComponent } from './mining-complex-list/mining-complex-list.component';
@@ -40,12 +39,6 @@ import { EquipmentsAddComponent } from './equipments-add/equipments-add.componen
     FormsModule,
     ReactiveFormsModule,
 
-    FlatpickrModule.forRoot(),
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory,
-    }),
-
     SharedModule,
 
     TableModule,
@@ -55,6 +48,8 @@ import { EquipmentsAddComponent } from './equipments-add/equipments-add.componen
     DialogModule,
     ConfirmDialogModule,
     AccordionModule,
+    TooltipModule,
+    FullCalendarModule,
   ],
   exports: [
     MiningComplexListComponent,

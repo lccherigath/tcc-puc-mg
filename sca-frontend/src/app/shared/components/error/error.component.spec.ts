@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MapCreatePointComponent } from './map-create-point.component';
+import { ErrorComponent } from './error.component';
 
-describe('MapCreatePointComponent', () => {
-  let component: MapCreatePointComponent;
-  let fixture: ComponentFixture<MapCreatePointComponent>;
+describe('ErrorComponent', () => {
+  let component: ErrorComponent;
+  let fixture: ComponentFixture<ErrorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapCreatePointComponent ]
+      declarations: [ ErrorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MapCreatePointComponent);
+    fixture = TestBed.createComponent(ErrorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

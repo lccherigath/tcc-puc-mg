@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from geoalchemy2.types import Geometry
 from flask_sqlalchemy import SQLAlchemy
 
+from operator import itemgetter
+
 from py_app.extensions.database import db
 # db = SQLAlchemy()
 
@@ -22,11 +24,27 @@ SITUACAO_OPERACIONAL = {
 }
 
 
-t_assoc_ativo_complexo = db.Table(
-    'assoc_ativo_complexo',
-    db.Column('complexo_minerario_id', db.ForeignKey('complexo_minerario.id', match='FULL'), primary_key=True, nullable=False),
-    db.Column('ativo_id', db.ForeignKey('ativo.id', match='FULL'), primary_key=True, nullable=False)
-)
+
+class AssocAtivoComplexo(db.Model):
+    __tablename__ = 'assoc_ativo_complexo'
+
+    complexo_minerario_id = db.Column(db.ForeignKey('complexo_minerario.id', match='FULL'), primary_key=True, nullable=False)
+    ativo_id = db.Column(db.ForeignKey('ativo.id', match='FULL'), primary_key=True, nullable=False)
+    quantidade = db.Column(db.Integer, nullable=False)
+
+    ativo = db.relationship('Ativo', primaryjoin='AssocAtivoComplexo.ativo_id == Ativo.id', backref='assoc_ativo_complexos')
+    complexo_minerario = db.relationship('ComplexoMinerario', primaryjoin='AssocAtivoComplexo.complexo_minerario_id == ComplexoMinerario.id', backref='assoc_ativo_complexos')
+
+    def to_dict(self, maintenance=False):
+        ativo = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        ativo['descricao'] = self.ativo.descricao
+        ativo['quantidade_disponivel'] = self.ativo.quantidade
+        ativo['status'] = STATUS[self.ativo.status]
+        ativo['categoria'] = self.ativo.categoria.to_dict()
+        if maintenance:
+            ativo['manutencoes'] = [manutencao.to_dict() for manutencao in self.manutencoes]
+        return ativo
+
 
 
 
@@ -39,8 +57,8 @@ class Ativo(db.Model):
     status = db.Column(db.SmallInteger, nullable=False, info='(0) Indisponível (1) Disponível')
     categoria_id = db.Column(db.ForeignKey('categoria.id', match='FULL'), nullable=False)
 
-    categoria = db.relationship('Categoria', primaryjoin='Ativo.categoria_id == Categoria.id', backref='ativoes')
-    complexo_minerarios = db.relationship('ComplexoMinerario', secondary='assoc_ativo_complexo', backref='ativoes')
+    categoria = db.relationship('Categoria', primaryjoin='Ativo.categoria_id == Categoria.id', backref='ativos')
+    complexo_minerarios = db.relationship('ComplexoMinerario', secondary='assoc_ativo_complexo', backref='ativos')
 
     def to_dict(self):
         ativo = {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -68,7 +86,7 @@ class Categoria(db.Model):
 
     def to_dict_with_assets(self):
         categoria = self.to_dict()
-        categoria['ativos'] = [ativo.to_dict() for ativo in self.ativoes]
+        categoria['ativos'] = [ativo.to_dict() for ativo in self.ativos]
         return categoria
 
 
@@ -86,15 +104,25 @@ class ComplexoMinerario(db.Model):
     municipio = db.Column(db.String(250), nullable=False)
     situacao_operacional = db.Column(db.SmallInteger, nullable=False, info='Situação operacional: (0) Em Construção (1) Em Operação (2) Desativada\n* Substitui o campo status')
 
-    def to_dict(self, complete=False):
+    def to_dict(self, complete=False, schedule=False):
         complexo_minerario = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        complexo_minerario['nome'] = self.nome if self.nome else 'Complexo Minerário de {0}'.format(self.municipio)
         complexo_minerario['lat_long'] = [float(self.lat), float(self.long)]
-        complexo_minerario['situacao_operacional'] = SITUACAO_OPERACIONAL[complexo_minerario['situacao_operacional']]
+        # complexo_minerario['situacao_operacional'] = SITUACAO_OPERACIONAL[complexo_minerario['situacao_operacional']]
         del complexo_minerario['lat']
         del complexo_minerario['long']
         if complete:
-            complexo_minerario['estruturas'] = [estrutura.to_dict() for estrutura in self.estruturas]
-            complexo_minerario['ativos'] = [ativo.to_dict() for ativo in self.ativoes]
+            if schedule:
+                del complexo_minerario['poligono']
+            else:
+                complexo_minerario['estruturas'] = sorted(
+                    [estrutura.to_dict() for estrutura in self.estruturas],
+                    key=itemgetter('id')
+                )
+            complexo_minerario['ativos'] = sorted(
+                [ativo.to_dict(maintenance=schedule) for ativo in self.assoc_ativo_complexos],
+                key=itemgetter('ativo_id')
+            )
         return complexo_minerario
 
 
@@ -117,9 +145,10 @@ class Estrutura(db.Model):
     complexo_minerario = db.relationship('ComplexoMinerario', primaryjoin='Estrutura.complexo_minerario_id == ComplexoMinerario.id', backref='estruturas')
 
     def to_dict(self):
-        estrutura = {c.name: getattr(self, c.name) for c in self.__table__.columns}
-        estrutura['situacao_operacional'] = SITUACAO_OPERACIONAL[estrutura['situacao_operacional']]
-        return estrutura
+        # estrutura = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        # estrutura['situacao_operacional'] = SITUACAO_OPERACIONAL[estrutura['situacao_operacional']]
+        # return estrutura
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 
@@ -162,10 +191,13 @@ class Manutencao(db.Model):
     complexo_minerario_id = db.Column(db.Integer, nullable=False)
     ativo_id = db.Column(db.Integer, nullable=False)
 
-    # complexo_minerario = db.relationship('AssocAtivoComplexo', primaryjoin='and_(Manutencao.complexo_minerario_id == AssocAtivoComplexo.complexo_minerario_id, Manutencao.ativo_id == AssocAtivoComplexo.ativo_id)', backref='manutencaos')
+    complexo_minerario = db.relationship('AssocAtivoComplexo', primaryjoin='and_(Manutencao.complexo_minerario_id == AssocAtivoComplexo.complexo_minerario_id, Manutencao.ativo_id == AssocAtivoComplexo.ativo_id)', backref='manutencoes')
 
     def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        manutencao = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        manutencao['data_hora'] = manutencao['data_hora'].isoformat()
+        manutencao['conclusao'] = manutencao['conclusao'].isoformat() if manutencao['conclusao'] else None
+        return manutencao
 
 
 t_raster_columns = db.Table(

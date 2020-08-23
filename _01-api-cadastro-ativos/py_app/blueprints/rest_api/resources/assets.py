@@ -2,7 +2,9 @@
 from flask import abort
 from flask_restful import Resource
 from py_app.models.mod1_ativos import Ativo, Categoria
-from py_app.blueprints.rest_api.utils import error_handler
+from py_app.blueprints.rest_api.utils import http_messages
+
+from py_app.extensions.database import db
 
 
 class AssetResource(Resource):
@@ -35,7 +37,7 @@ def list_assets(id=None):
         if id:
             asset = Ativo.query.filter_by(id=id).first()
             if not asset:
-                return error_handler.not_found()
+                return http_messages.not_found()
             return_data = asset.to_dict()
         else:
             assets = Ativo.query.all()
@@ -47,7 +49,7 @@ def list_assets(id=None):
             }
         return return_data, 200
     except Exception as e:
-        return error_handler.internal_error(e)
+        return http_messages.internal_error(e)
 
 
 def list_equipments():
@@ -63,7 +65,7 @@ def list_equipments():
         }
         return return_data, 200
     except Exception as e:
-        return error_handler.internal_error(e)
+        return http_messages.internal_error(e)
 
 
 def list_categories():
@@ -78,4 +80,4 @@ def list_categories():
         }
         return return_data, 200
     except Exception as e:
-        return error_handler.internal_error(e)
+        return http_messages.internal_error(e)

@@ -45,6 +45,18 @@ a:focus {
   margin: 40px 0;
 }
 
+.margin-right {
+  margin-right: 5px;
+}
+
+.margin-left {
+  margin-left: 5px;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
@@ -150,7 +162,7 @@ a.article:hover {
 
 #content {
   width: calc(100% - 250px);
-  padding: 40px;
+  padding: 20px;
   // min-height: 100vh;
   min-height: calc(100vh - 70px);
   transition: all 0.3s;
@@ -175,6 +187,14 @@ a.article:hover {
   height: 100%;
 }
 
+.card-height-50 {
+  height: 50%;
+}
+
+.card-body-map, .card-header-button {
+  padding: 12px;
+}
+
 .flex {
   display: flex;
 }
@@ -182,7 +202,15 @@ a.article:hover {
 .flex-item {
   flex: 1;
   // height: calc(100vh - h2 - padding sup e inf - navbar);
-  height: calc(100vh - 38px - 8px - 80px - 70px);
+  // height: calc(100vh - 38px - 8px - 80px - 70px);
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .btn-icon {
@@ -191,6 +219,12 @@ a.article:hover {
 
 .btn-min {
   font-size: .9rem;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  color: #fff;
+  border-color: $sidebar-active-color;
+  background-color: $sidebar-active-color;
 }
 
 /* ---------------------------------------------------
@@ -237,11 +271,67 @@ body .ui-panel .ui-panel-titlebar {
 }
 
 
+/* ---------------------------------------------------
+    FULL CALENDAR
+----------------------------------------------------- */
+.fc {
+  .card {
+    border-radius: 0;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .fc-content {
+    cursor: pointer;
+  }
+}
+
+
 
 
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
+@media (max-width: 537px) {
+  // .fc-toolbar {
+  //   font-size: 0.5em;
+  // }
+  .fc {
+    .fc-day-header {
+      font-size: .5rem;
+    }
+  }
+
+  .fc-header-toolbar {
+    display: block;
+    text-align: center;
+
+    h2 {
+      font-size: 1.2rem;
+      white-space: normal !important;
+    }
+
+    .fc-left {
+      margin-bottom: 10px;
+    }
+  }
+
+  .fc-footer-toolbar {
+    display: block;
+    text-align: center;
+
+    .btn {
+      font-size: .9rem;
+    }
+
+    .fc-left {
+      margin-bottom: 10px;
+    }
+  }
+}
+
 
 // Small devices (landscape phones, less than 768px)
 @media (max-width: 767.98px) {
@@ -266,4 +356,39 @@ body .ui-panel .ui-panel-titlebar {
   #sidebarCollapse span {
     display: none;
   }
+}
+
+
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) {
+  .flex {
+    display: block;
+  }
+
+  .flex-item {
+    // min-height: 600px;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  .height-map {
+    height: 500px;
+  }
+
+  .height-table {
+    height: 700px;
+  }
+
+  .card-height-50 {
+    min-height: 600px;
+  }
+}
+
+.card-body-table {
+  padding: 0;
+}
+
+.div-p-table {
+  height: calc(100% - 48px);
 }

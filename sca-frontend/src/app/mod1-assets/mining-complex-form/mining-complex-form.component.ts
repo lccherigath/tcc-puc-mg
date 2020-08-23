@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 
 import { ConfirmationService } from 'primeng/api';
 
@@ -8,6 +9,7 @@ import { Structure } from 'src/app/shared/models/structure';
 import { FederatedUnitService } from 'src/app/shared/services/federated-unit.service';
 import { ToastMessageService } from 'src/app/shared/services/toast-message.service';
 import { ValueLabelsService } from 'src/app/shared/services/value-labels.service';
+import { MiningComplexService } from 'src/app/shared/services/mining-complex.service';
 
 import * as L from 'leaflet';
 
@@ -27,7 +29,7 @@ export class MiningComplexFormComponent implements OnInit {
   operationalSituationTypes: any;
   structures: any;
   structureIndex: number;
-  actualStructure: Structure;
+  currentStructure: Structure;
 
   equipments = [];
 
@@ -41,9 +43,11 @@ export class MiningComplexFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private federatedUnitService: FederatedUnitService,
+    private miningComplexService: MiningComplexService,
     private toastMessageService: ToastMessageService,
     private valueLabelsService: ValueLabelsService,
     private confirmationService: ConfirmationService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -109,7 +113,7 @@ export class MiningComplexFormComponent implements OnInit {
 
   showDialog() {
     this.structureIndex = null;
-    this.actualStructure = null;
+    this.currentStructure = null;
 
     this.displayDialogStructures = true;
   }
@@ -123,9 +127,9 @@ export class MiningComplexFormComponent implements OnInit {
       this.structures.push(structure);
     }
     this.structureIndex = null;
-    this.actualStructure = null;
+    this.currentStructure = null;
     // this.miningComplex.estruturas = this.structures;
-    // console.log(this.miningComplex.estruturas);
+    // console.log(structure);
   }
 
   getOperationalSituationLabel = (value: number) => {
@@ -138,7 +142,7 @@ export class MiningComplexFormComponent implements OnInit {
   showDialogEdit(event: Event, structure: Structure) {
     this.showDialog();
     this.structureIndex = this.structures.indexOf(structure);
-    this.actualStructure = { ... structure };
+    this.currentStructure = { ... structure };
     event.preventDefault();
   }
 
@@ -165,7 +169,7 @@ export class MiningComplexFormComponent implements OnInit {
     } else {
       this.equipments.push(equipment);
     }
-    console.log(this.equipments);
+    // console.log(this.equipments);
   }
 
   onSubmit = () => {
@@ -177,17 +181,17 @@ export class MiningComplexFormComponent implements OnInit {
       this.formMiningComplex.value.municipio = this.formMiningComplex.value.municipio.split(',')[1];
       console.log(this.formMiningComplex.value);
 
-      // this.exampleService.save(this.formMiningComplex.value).subscribe(
-      //   success => {
-      //     this.toastMessageService.showMessage('success', '', `${this.formMiningComplex.value.id ? 'Atualizado' : 'Criado'} com sucesso!`);
-      //     this.location.back();
-      //   },
-      //   error => {
-      //     this.toastMessageService.showMessage('error', `Erro ${error.status}`, error.statusText);
-      //     console.error(error);
-      //   }
-      // );
-      // // this.formMiningComplex.reset();
+      this.miningComplexService.save(this.formMiningComplex.value).subscribe(
+        success => {
+          this.toastMessageService.showMessage('success', '', `${this.formMiningComplex.value.id ? 'Atualizado' : 'Criado'} com sucesso!`);
+          this.location.back();
+        },
+        error => {
+          this.toastMessageService.showMessage('error', `Erro ${error.status}`, error.statusText);
+          // console.error(error);
+        }
+      );
+      // this.formMiningComplex.reset();
     }
   }
 

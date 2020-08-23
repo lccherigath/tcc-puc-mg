@@ -1,40 +1,12 @@
 @import "../../../assets/scss/variables";
 
-.margin-right {
-  margin-right: 5px;
-}
-
-.margin-left {
-  margin-left: 5px;
+.fixed-height {
+  // height: calc(100vh - h2 - padding sup e inf - navbar);
+  height: calc(100vh - 38px - 8px - 40px - 70px);
 }
 
 .btn-new {
   width: 100%;
-}
-
-.card-body-map, .card-header-button {
-  padding: 12px;
-}
-
-// Medium devices (tablets, less than 992px)
-@media (max-width: 991.98px) {
-  .flex {
-    display: block;
-  }
-
-  .flex-item {
-    height: 600px;
-    margin: 0;
-    margin-bottom: 10px;
-  }
-}
-
-.card-body-table {
-  padding: 0;
-}
-
-.div-p-table {
-  height: calc(100% - 48px);
 }
 
 /* ---------------------------------------------------
@@ -123,7 +95,6 @@
   }
 
 }
-
 
 /* Responsive */
 @media screen and (max-width: 64em) {

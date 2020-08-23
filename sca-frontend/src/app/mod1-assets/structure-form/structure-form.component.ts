@@ -28,9 +28,9 @@ export class StructureFormComponent implements OnInit, OnChanges {
 
   constructor(
     private formBuilder: FormBuilder,
-    private location: Location,
-    private activatedRoute: ActivatedRoute,
-    private toastMessageService: ToastMessageService,
+    // private location: Location,
+    // private activatedRoute: ActivatedRoute,
+    // private toastMessageService: ToastMessageService,
     private valueLabelsService: ValueLabelsService
     // private exampleService: ExampleService
   ) {}
@@ -81,6 +81,9 @@ export class StructureFormComponent implements OnInit, OnChanges {
 
   onSubmit = () => {
     if (this.formStructure.valid) {
+      if (!this.formStructure.value.inserida_pnsb) {
+        this.formStructure.value.inserida_pnsb = false;
+      }
       // console.log(this.formStructure.value);
       this.emitStructure.emit(this.formStructure.value);
       this.formStructure.reset();

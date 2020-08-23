@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LeafletMapComponent } from './components/leaflet-map/leaflet-map.component';
-import { MapCreatePointComponent } from './components/map-create-point/map-create-point.component';
-
+import { ErrorComponent } from './components/error/error.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 
 @NgModule({
-  declarations: [LeafletMapComponent, MapCreatePointComponent],
+  declarations: [LeafletMapComponent, ErrorComponent, LoadingComponent],
   imports: [
     CommonModule
   ],
-  exports: [LeafletMapComponent, MapCreatePointComponent]
+  exports: [LeafletMapComponent, ErrorComponent, LoadingComponent]
 })
 export class SharedModule { }

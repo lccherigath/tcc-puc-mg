@@ -22,9 +22,4 @@ export class FederatedUnitService {
     `https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-${ufId}-mun.json`
   ).pipe(take(1));
 
-  getLayerCentroid = (arrLayerPoints) => {
-    return arrLayerPoints.reduce((x, y) => {
-      return [x[0] + y[0] / arrLayerPoints.length, x[1] + y[1] / arrLayerPoints.length];
-    }, [0, 0]);
-  }
 }

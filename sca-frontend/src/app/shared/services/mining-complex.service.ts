@@ -6,6 +6,7 @@ import { tap, delay, take, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MiningComplex } from '../models/mining-complex';
 import { Asset } from '../models/asset';
+import { Structure } from '../models/structure';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class MiningComplexService {
   list = () => {
     return this.http.get<MiningComplex[]>(`${this.API_HOST}/complexos-minerarios`)
       .pipe(
-        // delay(2000),
+        // delay(5000),
         // tap(console.log),
         take(1)
       );
@@ -35,25 +36,48 @@ export class MiningComplexService {
       take(1)
     );
 
-  // loadById = (id: number) => {
-  //   return this.http.get<Example>(`${this.API_HOST}/${id}`).pipe(take(1));
-  // }
+  loadById = (id: number, schedule?: boolean) => {
+    const url = `${this.API_HOST}/complexos-minerarios/${id}`;
+    return this.http.get<MiningComplex>(schedule ? url + '/agenda' : url).pipe(
+      // tap(console.log),
+      take(1)
+    );
+  }
 
-  // private create = (example: Example) => {
-  //   return this.http.post(this.API_HOST, example)
-  //     .pipe(
-  //       take(1)
-  //     );
-  // }
+  private create = (miningComplex: MiningComplex) => {
+    return this.http
+      .post(`${this.API_HOST}/complexos-minerarios`, miningComplex)
+      .pipe(take(1));
+  }
 
-  // private update = (example: Example) => {
-  //   return this.http.put(`${this.API_HOST}/${example.id}`, example).pipe(take(1));
-  // }
+  private update = (miningComplex: MiningComplex) => {
+    return this.http
+      .put(
+        `${this.API_HOST}/complexos-minerarios/${miningComplex.id}`,
+        miningComplex
+      )
+      .pipe(take(1));
+  }
 
-  // save = (example: Example) => {
-  //   if (example.id) {
-  //     return this.update(example);
-  //   }
-  //   return this.create(example);
-  // }
+  save = (miningComplex: MiningComplex) => {
+    if (miningComplex.id) {
+      return this.update(miningComplex);
+    }
+    return this.create(miningComplex);
+  }
+
+  updateEquipment = (equipment: any) => this.http
+    .patch(`${this.API_HOST}/complexos-minerarios/equipamentos`, equipment)
+    .pipe(take(1));
+
+  private updateStructure = (structure: Structure) => this.http
+    .patch(`${this.API_HOST}/complexos-minerarios/estruturas`, structure)
+    .pipe(take(1));
+
+  private addStructure = (structure: Structure) => this.http
+    .post(`${this.API_HOST}/complexos-minerarios/estruturas`, structure)
+    .pipe(take(1));
+
+  saveStructure = (structure: Structure) =>
+    structure.id ? this.updateStructure(structure) : this.addStructure(structure);
 }

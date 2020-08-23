@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { MiningComplexService } from 'src/app/shared/services/mining-complex.service';
 import { ToastMessageService } from 'src/app/shared/services/toast-message.service';
 import { MiningComplex } from 'src/app/shared/models/mining-complex';
+import { ValueLabelsService } from 'src/app/shared/services/value-labels.service';
 
 import * as L from 'leaflet';
 import { BRAZIL_GEOJSON } from 'src/app/shared/components/leaflet-map/brazil-geojson';
@@ -20,9 +21,10 @@ export class MiningComplexListComponent implements OnInit {
 
   constructor(
     private miningComplexService: MiningComplexService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    // private router: Router,
+    // private activatedRoute: ActivatedRoute,
     private toastr: ToastMessageService,
+    private valueLabelsService: ValueLabelsService,
   ) { }
 
   miningComplexItems$: Observable<MiningComplex[]>;
@@ -37,7 +39,7 @@ export class MiningComplexListComponent implements OnInit {
     this.miningComplexItems$ = this.miningComplexService.list()
       .pipe(
         map((data: any) => this.miningComplexItems = data.results),
-        tap(console.log),
+        // tap(console.log),
         catchError(error => {
           this.toastr.showMessage('error', '', 'Erro ao buscar dados no servidor');
           this.error$.next(true);
@@ -46,15 +48,6 @@ export class MiningComplexListComponent implements OnInit {
       );
   }
 
-  onEdit = (id: number) => {
-    this.router.navigate(
-      ['example-form-edit', id],
-      // { relativeTo: this.activatedRoute } // USAR SE EXISTIREM ROTAS FILHAS
-    );
-  }
-
-  // onRowSelect = (event) => {
-  //   console.log(event.data);
-  // }
+  selectOperationalSituationLabel = (code: number) => this.valueLabelsService.operationalSituationFormat(code);
 
 }

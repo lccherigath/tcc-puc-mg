@@ -1,192 +1,46 @@
-<h2>Complexo Minerário X | Agenda</h2>
+<!-- <div *ngIf="miningComplex$ | async as miningComplex; else loadingError"> -->
+<div *ngIf="miningComplex; else loadingError">
+  <h2>{{ miningComplex.nome }} | Agenda</h2>
 
-<!--div class="flex">
-  <div class="flex-item">
-    <div class="card card-height-100">
-      <div class="card-body">
-
-      </div>
-    </div>
-  </div>
-</div-->
-
-<div class="row text-center">
-  <div class="col-md-4">
-    <div class="btn-group">
-      <div
-        class="btn btn-primary"
-        mwlCalendarPreviousView
-        [view]="view"
-        [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
-      >
-        Previous
-      </div>
-      <div
-        class="btn btn-outline-secondary"
-        mwlCalendarToday
-        [(viewDate)]="viewDate"
-      >
-        Today
-      </div>
-      <div
-        class="btn btn-primary"
-        mwlCalendarNextView
-        [view]="view"
-        [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
-      >
-        Next
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <h3>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
-  </div>
-  <div class="col-md-4">
-    <div class="btn-group">
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month"
-      >
-        Month
-      </div>
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week"
-      >
-        Week
-      </div>
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-      >
-        Day
-      </div>
-    </div>
+  <div class="calendar">
+    <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
   </div>
 </div>
-<br />
-<div [ngSwitch]="view">
-  <mwl-calendar-month-view
-    *ngSwitchCase="CalendarView.Month"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    [activeDayIsOpen]="activeDayIsOpen"
-    (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
+
+
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{width: '50vw'}"
+  [maximizable]="false"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
   >
-  </mwl-calendar-month-view>
-  <mwl-calendar-week-view
-    *ngSwitchCase="CalendarView.Week"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-week-view>
-  <mwl-calendar-day-view
-    *ngSwitchCase="CalendarView.Day"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-day-view>
-</div>
 
-<!-- Everything you see below is just for the demo, you don't need to include it in your app -->
+  ...
 
-<br /><br /><br />
-<!--
-        <h3>
-          Edit events
-          <button class="btn btn-primary float-right" (click)="addEvent()">
-            Add new
-          </button>
-          <div class="clearfix"></div>
-        </h3>
+  <p-footer>
+    <button class="btn btn-secondary btn-min" (click)="displayDialog=false">Fechar <i class="fas fa-times"></i></button>
+    <!-- <button class="btn btn-info" (click)="displayDialogEquipments=false">Confirmar</button> -->
+  </p-footer>
+</p-dialog>
 
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Primary color</th>
-                <th>Secondary color</th>
-                <th>Starts at</th>
-                <th>Ends at</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
 
-            <tbody>
-              <tr *ngFor="let event of events">
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [(ngModel)]="event.title"
-                    (keyup)="refresh.next()"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="color"
-                    [(ngModel)]="event.color.primary"
-                    (change)="refresh.next()"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="color"
-                    [(ngModel)]="event.color.secondary"
-                    (change)="refresh.next()"
-                  />
-                </td>
-                <td>
-                  <input
-                    class="form-control"
-                    type="text"
-                    mwlFlatpickr
-                    [(ngModel)]="event.start"
-                    (ngModelChange)="refresh.next()"
-                    [altInput]="true"
-                    [convertModelValue]="true"
-                    [enableTime]="true"
-                    dateFormat="Y-m-dTH:i"
-                    altFormat="F j, Y H:i"
-                    placeholder="Not set"
-                  />
-                </td>
-                <td>
-                  <input
-                    class="form-control"
-                    type="text"
-                    mwlFlatpickr
-                    [(ngModel)]="event.end"
-                    (ngModelChange)="refresh.next()"
-                    [altInput]="true"
-                    [convertModelValue]="true"
-                    [enableTime]="true"
-                    dateFormat="Y-m-dTH:i"
-                    altFormat="F j, Y H:i"
-                    placeholder="Not set"
-                  />
-                </td>
-                <td>
-                  <button class="btn btn-danger" (click)="deleteEvent(event)">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div> -->
+<ng-template #loadingError>
+  <div class="flex">
+    <div class="flex-item">
+      <div class="card card-height-100">
+        <div class="card-body">
+          <div *ngIf="error$ | async; else loading">
+            <app-error></app-error>
+          </div>
+          <ng-template #loading>
+            <app-loading></app-loading>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

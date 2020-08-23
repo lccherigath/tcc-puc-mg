@@ -32,4 +32,6 @@ export class ValueLabelsService {
     { name: 'n-1', value: 1, label: 'Nível 1' },
     { name: 'n-0', value: 0, label: 'Sem Emergência' },
   ];
+
+  operationalSituationFormat = (code: number) => this.getOperationalSituation().find(item => item.value === code).label;
 }
