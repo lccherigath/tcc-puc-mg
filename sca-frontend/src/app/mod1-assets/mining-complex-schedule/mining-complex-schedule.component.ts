@@ -9,10 +9,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
+// import { FullCalendar } from 'primeng/fullcalendar';
 
 import { MiningComplexService } from 'src/app/shared/services/mining-complex.service';
 import { ToastMessageService } from 'src/app/shared/services/toast-message.service';
 import { MiningComplex } from 'src/app/shared/models/mining-complex';
+import { Event } from 'src/app/shared/models/event';
 
 
 
@@ -23,6 +25,7 @@ import { MiningComplex } from 'src/app/shared/models/mining-complex';
 })
 export class MiningComplexScheduleComponent implements OnInit {
 
+  // @ViewChild('calendar') calendar: FullCalendar;
   events: any[] = [];
   options: any;
 
@@ -33,6 +36,8 @@ export class MiningComplexScheduleComponent implements OnInit {
 
   displayDialog = false;
   dialogTitle: string;
+  currentEvent: Event;
+  equipmentsList: any[];
 
   // constructor(private modal: NgbModal) {}
   constructor(
@@ -45,9 +50,7 @@ export class MiningComplexScheduleComponent implements OnInit {
     this.activatedRoute.params.subscribe((params: any) => {
       this.miningComplexId = params.id;
       // console.log(id);
-
       this.loadData();
-
     });
 
     this.options = {
@@ -99,6 +102,7 @@ export class MiningComplexScheduleComponent implements OnInit {
       ],
       // editable: true,
       locale: 'pt-br',
+      timeZone: 'America/Sao_Paulo',
       height: (window.innerHeight - 70 - 40 - 46),
       noEventsMessage: 'Nenhum evento para ser exibido',
       weekNumbers: true,
@@ -124,21 +128,29 @@ export class MiningComplexScheduleComponent implements OnInit {
       .subscribe(
         data => {
           this.miningComplex = data;
+
+          this.equipmentsList = this.miningComplex.ativos.map(item => ({...item}));
+          this.equipmentsList.forEach(item => delete item.manutencoes);
           // console.log(this.miningComplex.ativos);
+
+          const events = [];
           this.miningComplex.ativos.forEach(item => {
             item.manutencoes.forEach(element => {
               const event: any = {
                 id: element.id,
-                title: `${item.descricao}: ${element.descricao}`,
+                // title: `${item.descricao}: ${element.descricao}`,
+                title: element.descricao,
                 // url: element,
                 start: element.data_hora,
                 end: element.conclusao,
-                // color: 'red'
+                // color: 'red',
+                asset: item.ativo_id,
               };
               event.color = this.setColor(event);
-              this.events.push(event);
+              events.push(event);
             });
           });
+          this.events = [...events];
         },
         error => {
           this.toastr.showMessage('error', '', 'Erro ao buscar dados no servidor');
@@ -160,18 +172,43 @@ export class MiningComplexScheduleComponent implements OnInit {
   }
 
   eventClick = (info) => {
-    // alert('Event: ' + info.event.title);
-    // console.log(info.event.id, info.event.start.toISOString().substring(0, 10), info.event.end.toISOString().substring(0, 10));
+    // info.event.title, info.event.id, info.event.start.toISOString().substring(0, 10), info.event.end.toISOString().substring(0, 10)
     this.displayDialog = true;
     this.dialogTitle = 'Alterar Evento';
+
+    const event = new Event();
+    event.id = +info.event.id;
+    event.tipo_evento = 'maintenance';
+    event.descricao = info.event.title;
+    event.data_hora = info.event.start.toISOString().substring(0, 16);
+    event.conclusao = info.event.end ? info.event.end.toISOString().substring(0, 16) : null;
+    event.ativo_id = info.event.extendedProps.asset;
+    // console.log(event);
+    this.currentEvent = event;
   }
 
   dateClick = (info) => {
-    // alert('Event: ' + info.event.title);
-    // console.log(info.event.id, info.event.start.toISOString().substring(0, 10), info.event.end.toISOString().substring(0, 10));
-    console.log(info.date);
-    this.displayDialog = true;
-    this.dialogTitle = 'Novo Evento';
+    const today = new Date();
+    // console.log(today);
+    const event = new Event();
+
+    if (info.date) {
+      if (
+        new Date(info.date.toISOString().substring(0, 10)) >=
+        new Date(today.toISOString().substring(0, 10))
+      ) {
+        this.displayDialog = true;
+        this.dialogTitle = 'Novo Evento';
+
+        event.data_hora = info.date.toISOString().substring(0, 16);
+        // console.log(info.date, event);
+      }
+    } else {
+      this.displayDialog = true;
+      this.dialogTitle = 'Novo Evento';
+    }
+    this.currentEvent = event;
+    // console.log(this.currentEvent);
   }
 
   setColor = (event: any) => {
@@ -188,6 +225,26 @@ export class MiningComplexScheduleComponent implements OnInit {
       }
     }
     return '#116FBF'; // azul padrão do full calendar
+  }
+
+  closeDialog = () => {
+    this.displayDialog = false;
+    this.currentEvent = null;
+  }
+
+  receiveEvent = (event: Event) => {
+    event.complexo_minerario_id = this.miningComplexId;
+    // console.log(event);
+    this.miningComplexService.changeEvent(event).subscribe(
+      success => {
+        this.closeDialog();
+        this.loadData();
+        // this.calendar.refetchEvents();
+        const message = `Evento ${event.id ? 'atualizado' : 'agendado'} com sucesso.`;
+        this.toastr.showMessage('success', '', message);
+      },
+      error => this.toastr.showMessage('error', '', `Não foi possível realizar a alteração. ${error.error.message}`)
+    );
   }
 
 }

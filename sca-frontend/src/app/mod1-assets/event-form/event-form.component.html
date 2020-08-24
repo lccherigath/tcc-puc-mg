@@ -1,0 +1,110 @@
+<form [formGroup]="formEvent">
+
+  <div class="form-group">
+    <label for="uf">Tipo de Evento</label>
+    <select
+      #selectEventType
+      class="form-control"
+      name="tipo_evento" id="tipo_evento" formControlName="tipo_evento"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('tipo_evento') || fieldTouched('tipo_evento')) && hasError('tipo_evento')
+      }"
+    >
+      <!-- <option value="">Selecione</option> -->
+      <option value="maintenance">Manutenção/Reposição</option>
+    </select>
+    <div class="invalid-feedback" *ngIf="hasError('tipo_evento')">
+      <span *ngIf="hasError('tipo_evento')['required']">
+        Por favor, selecione o tipo do evento.
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="selectEventType.value === 'maintenance'">
+    <label for="ativo_id">Ativo</label>
+    <select
+      class="form-control"
+      name="ativo_id" id="ativo_id" formControlName="ativo_id"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('ativo_id') || fieldTouched('ativo_id')) && hasError('ativo_id')
+      }"
+    >
+      <!-- <option value="">Selecione</option> -->
+      <option *ngFor="let equipment of equipments" [value]="equipment.ativo_id">{{ equipment.descricao }}</option>
+    </select>
+    <div class="invalid-feedback" *ngIf="hasError('ativo_id')">
+      <span *ngIf="hasError('ativo_id')['required']">
+        Por favor, selecione o equipamento.
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="descricao">Descrição</label>
+    <input
+      type="text"
+      class="form-control"
+      name="descricao"
+      id="descricao"
+      formControlName="descricao"
+      [ngClass]="{
+        'is-invalid':
+          (fieldDirty('descricao') || fieldTouched('descricao')) && hasError('descricao')
+      }"
+    />
+    <div class="invalid-feedback" *ngIf="hasError('descricao')">
+      <span *ngIf="hasError('descricao')['required']">
+        Por favor, informe a descrição.
+      </span>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="data_hora">Início</label>
+        <input #startDate
+          type="datetime-local" class="form-control" name="data_hora" id="data_hora" formControlName="data_hora"
+          [min]="today.toISOString().substring(0, 16)" [readonly]="eventDate < today"
+          [ngClass]="{ 'is-invalid': (fieldDirty('data_hora') || fieldTouched('data_hora')) && hasError('data_hora') }"
+        >
+        <div class="invalid-feedback" *ngIf="hasError('data_hora')">
+          <span *ngIf="hasError('data_hora')['required']">
+            Por favor, informe a data e o horário do evento.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="conclusao">Conclusão</label>
+        <input
+          type="datetime-local" class="form-control" name="conclusao" id="conclusao" formControlName="conclusao"
+          [min]="startDate.value" [readonly]="fieldValid()"
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group text-right">
+    <button
+      type="button"
+      class="btn btn-secondary mt-4"
+      [disabled]="fieldValid()"
+      (click)="onCancel()"
+    >
+      Limpar <i class="fas fa-undo-alt"></i>
+    </button>
+    <button
+      type="submit"
+      class="btn btn-info mt-4 ml-2"
+      [disabled]="formEvent.invalid || fieldValid()"
+      (click)="onSubmit()"
+      >
+      Salvar <i class="fas fa-check"></i>
+    </button>
+  </div>
+
+</form>

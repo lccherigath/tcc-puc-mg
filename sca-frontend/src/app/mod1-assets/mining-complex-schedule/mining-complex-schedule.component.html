@@ -3,7 +3,7 @@
   <h2>{{ miningComplex.nome }} | Agenda</h2>
 
   <div class="calendar">
-    <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+    <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar>
   </div>
 </div>
 
@@ -19,10 +19,15 @@
   [resizable]="false"
   >
 
-  ...
+  <app-event-form
+    [event]="currentEvent"
+    [equipments]="equipmentsList"
+    (eventEmit)="receiveEvent($event)"
+  >
+  </app-event-form>
 
   <p-footer>
-    <button class="btn btn-secondary btn-min" (click)="displayDialog=false">Fechar <i class="fas fa-times"></i></button>
+    <button class="btn btn-secondary btn-min" (click)="closeDialog()">Fechar <i class="fas fa-times"></i></button>
     <!-- <button class="btn btn-info" (click)="displayDialogEquipments=false">Confirmar</button> -->
   </p-footer>
 </p-dialog>

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import abort, request
 from flask_restful import Resource
-from py_app.models.mod1_ativos import ComplexoMinerario, Estrutura, AssocAtivoComplexo, Ativo
+from py_app.models.mod1_ativos import ComplexoMinerario, Estrutura, AssocAtivoComplexo, Ativo, Manutencao
 from py_app.blueprints.rest_api.utils import http_messages
+
+from datetime import datetime
 
 from py_app.extensions.database import db
 
@@ -79,6 +81,42 @@ class MiningComplexScheduleResource(Resource):
             return mining_complex.to_dict(complete=True, schedule=True), 200
         except Exception as e:
             return http_messages.internal_error(e)
+
+    def post(self, mining_complex_id):
+        try:
+            r = request.json
+            start_date = datetime.strptime(r['data_hora'], '%Y-%m-%dT%H:%M')
+            if start_date < datetime.now():
+                return http_messages.http_message(400, 'O evento não pode ser marcado para um período passado.')
+
+            end_date = datetime.strptime(r['conclusao'], '%Y-%m-%dT%H:%M') if r['conclusao'] else None
+            if end_date and end_date < start_date:
+                return http_messages.http_message(400, 'A data final não pode ser anterior à data inicial.')
+
+            description = r['descricao'].title() if r['descricao'] else None
+            asset_id = r['ativo_id']
+            if r['id']:
+                maintenance = Manutencao.query.get(r['id'])
+                if not maintenance:
+                    return http_messages.bad_request()
+                maintenance.descricao = description
+                maintenance.data_hora = start_date
+                maintenance.conclusao = end_date
+                maintenance.ativo_id = asset_id
+            else:
+                maintenance = Manutencao(
+                    descricao=description,
+                    data_hora=start_date,
+                    conclusao=end_date,
+                    ativo_id=asset_id,
+                    complexo_minerario_id=mining_complex_id
+                )
+                db.session.add(maintenance)
+            db.session.commit()
+            return http_messages.http_message(200, 'OK')
+        except Exception as e:
+            print(e)
+            return http_messages.bad_request(e)
 
 
 

@@ -66,7 +66,7 @@ export class MiningComplexFormComponent implements OnInit {
       id: [miningComplex.id],
       nome: [miningComplex.nome, Validators.maxLength(250)],
       uf: [miningComplex.uf, Validators.required],
-      // municipio: [{value: miningComplex.municipio, disabled: true}, Validators.required],
+      // municipio: [{value: miningComplex.municipio, disabled: this.cityList ? false : true}, Validators.required],
       municipio: [miningComplex.municipio, Validators.required],
       situacao_operacional: [miningComplex.situacao_operacional, Validators.required],
       lat_long: [miningComplex.lat_long],

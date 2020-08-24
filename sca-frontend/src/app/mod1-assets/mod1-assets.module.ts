@@ -21,6 +21,7 @@ import { MiningComplexScheduleComponent } from './mining-complex-schedule/mining
 import { SharedModule } from '../shared/shared.module';
 import { StructureFormComponent } from './structure-form/structure-form.component';
 import { EquipmentsAddComponent } from './equipments-add/equipments-add.component';
+import { EventFormComponent } from './event-form/event-form.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { EquipmentsAddComponent } from './equipments-add/equipments-add.componen
     MiningComplexScheduleComponent,
     StructureFormComponent,
     EquipmentsAddComponent,
+    EventFormComponent,
   ],
   imports: [
     CommonModule,

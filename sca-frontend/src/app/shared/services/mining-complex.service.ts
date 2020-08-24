@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { MiningComplex } from '../models/mining-complex';
 import { Asset } from '../models/asset';
 import { Structure } from '../models/structure';
+import { Event } from '../models/event';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,9 @@ export class MiningComplexService {
     );
   }
 
+  changeEvent = (event: Event) => this.http
+    .post(`${this.API_HOST}/complexos-minerarios/${event.complexo_minerario_id}/agenda`, event).pipe(take(1));
+
   private create = (miningComplex: MiningComplex) => {
     return this.http
       .post(`${this.API_HOST}/complexos-minerarios`, miningComplex)
@@ -80,4 +84,5 @@ export class MiningComplexService {
 
   saveStructure = (structure: Structure) =>
     structure.id ? this.updateStructure(structure) : this.addStructure(structure);
+
 }
