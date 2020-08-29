@@ -8,6 +8,10 @@ from datetime import datetime
 
 from py_app.extensions.database import db
 
+import pika
+from dynaconf import settings
+from json import dumps
+
 
 class MiningComplexResource(Resource):
     def get(self):
@@ -55,6 +59,13 @@ class MiningComplexResource(Resource):
             db.session.add(mining_complex)
             db.session.commit()
             db.session.refresh(mining_complex)
+
+            send_info_to_queue({
+                'id': mining_complex.id,
+                'nome': mining_complex.nome,
+                'situacao_operacional': mining_complex.situacao_operacional
+            })
+
             return http_messages.http_message(201, 'Created', mining_complex.id)
         except Exception as e:
             print(e)
@@ -224,3 +235,26 @@ def list_mining_complex(id=None):
         return return_data, 200
     except Exception as e:
         return http_messages.internal_error(e)
+
+
+def send_info_to_queue(data):
+    try:
+        connection = pika.BlockingConnection(
+            pika.URLParameters(settings.RABBITMQ_URI)
+        )
+        data_dumps = dumps(data)
+
+        channel = connection.channel()
+
+        channel.queue_declare(queue='mining-complex-queue', durable=True)
+
+        channel.basic_publish(
+            exchange='amq.direct',
+            routing_key='mining_complex_rk',
+            body=data_dumps
+        )
+        print(f" [x] Enviando dados para a fila... {data_dumps}")
+        connection.close()
+    except Exception as e:
+        print('Dados não enviados para a fila.')
+        print(e)
