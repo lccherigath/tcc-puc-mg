@@ -6,6 +6,7 @@
     <button type="button" class="btn btn-info ml-1" [routerLink]="['/complexos-minerarios']">
       <i class="fas fa-home"></i>
     </button>
+
     <button
       class="btn btn-dark d-inline-block d-lg-none ml-auto"
       type="button"
@@ -20,17 +21,11 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Page</a>
-        </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Page</a>
+          <a class="nav-link" routerLink="/">Olá, usuário!</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Page</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Page</a>
+        <li class="nav-item user-image">
+          <a class="nav-link" routerLink="/"></a>
         </li>
       </ul>
     </div>

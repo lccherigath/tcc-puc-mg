@@ -6,3 +6,12 @@
 }
 // $sidebar-background-color
 // $sidebar-active-color
+
+.user-image {
+  border-radius: 50%;
+  height: 38px;
+  width: 38px;
+  background-image: url("https://randomuser.me/api/portraits/men/77.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
