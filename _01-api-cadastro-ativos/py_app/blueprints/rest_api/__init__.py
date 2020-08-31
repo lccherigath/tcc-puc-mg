@@ -2,6 +2,7 @@
 from flask import Blueprint
 from flask_restful import Api
 
+from .resources.test import TestResource
 from .resources.assets import AssetResource, AssetItemResource, EquipmentResource, EquipmentCategoriesResource
 from .resources.mining_complex import \
     MiningComplexResource, MiningComplexItemResource, MiningComplexEquipmentsResource, MiningComplexStructuresResource, MiningComplexScheduleResource
@@ -11,6 +12,8 @@ api = Api(bp)
 
 
 def init_app(app):
+    api.add_resource(TestResource, '/')
+
     api.add_resource(AssetResource, '/ativos')
     api.add_resource(AssetItemResource, '/ativos/<asset_id>')
     api.add_resource(EquipmentResource, '/ativos/equipamentos')
