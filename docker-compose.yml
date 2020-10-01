@@ -1,0 +1,107 @@
+version: '3'
+
+volumes:
+  dados:
+
+networks:
+  web:
+  cadastro_ativos:
+  processos_minerarios:
+  mensageria:
+
+services:
+
+  db_ativos:
+    image: mdillon/postgis:11
+    environment:
+      - POSTGRES_PASSWORD=12345678
+    volumes:
+      # Scripts
+      - ./scripts-db/1-mod1-ativos.sql:/docker-entrypoint-initdb.d/1-mod1-ativos.sql
+      - ./scripts-db/2-mod1-ativos-load.sql:/docker-entrypoint-initdb.d/2-mod1-ativos-load.sql
+      # Volume dos dados
+      # - dados:/var/lib/postgresql/data
+    networks:
+      - cadastro_ativos
+
+  api_ativos:
+    build: ./_01-api-cadastro-ativos
+    volumes:
+      - ./_01-api-cadastro-ativos:/app
+    # ports:
+    #   - 8000:8000
+    #   # http://localhost:8000/api/v1/ativos/equipamentos
+    #   # http://localhost/mod1/ativos/equipamentos
+    working_dir: /app
+    command: bash ./start.sh
+    networks:
+      - cadastro_ativos
+      - web
+      - processos_minerarios
+      - mensageria
+    depends_on:
+      - db_ativos
+
+  frontend:
+    image: nginx:1.19
+    volumes:
+      # Site
+      - ./sca-frontend/dist/sca-frontend:/usr/share/nginx/html
+      # Proxy reverso
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - web
+    depends_on:
+      - api_ativos
+
+  db_processos_minerarios:
+    image: mdillon/postgis:11
+    environment:
+      - POSTGRES_PASSWORD=12345678
+    volumes:
+      # Scripts
+      - ./scripts-db/mod2-processos-minerarios.sql:/docker-entrypoint-initdb.d/mod2-processos-minerarios.sql
+      # Volume dos dados
+      # - dados:/var/lib/postgresql/data
+    networks:
+      - mensageria
+      - processos_minerarios
+
+  rabbit_mq:
+    image: 'rabbitmq:3.8.9-management'
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    networks:
+      - mensageria
+      - processos_minerarios
+      - web
+
+  api_processos_minerarios:
+    image: python:3.8
+    environment:
+      - DB_HOST=db_processos_minerarios
+      - DB_NAME=mod2-processos-minerarios
+      - DB_USER=postgres
+      - DB_PASSWORD=12345678
+      - RMQ_HOST=rabbit_mq
+      - RMQ_USER=admin
+      - RMQ_PASSWORD=admin
+      - RMQ_QUEUE=mining-complex-queue
+    volumes:
+      - ./_02-api-processos-minerarios:/app
+    working_dir: /app
+    command: bash ./run.sh
+    networks:
+      - processos_minerarios
+      - mensageria
+      - cadastro_ativos
+    depends_on:
+      - db_processos_minerarios
+      - rabbit_mq
+

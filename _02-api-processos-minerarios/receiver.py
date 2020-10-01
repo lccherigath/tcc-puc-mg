@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import pika
 import psycopg2
+import os
 from json import loads
 
 
 def postgres_access(mining_complex_info):
-    con = psycopg2.connect(host='172.18.0.2', database='mod2-processos-minerarios',
-                          user='postgres', password='12345678')
+    con = psycopg2.connect(host=os.getenv('DB_HOST', '172.18.0.2'), database=os.getenv('DB_NAME', 'mod2-processos-minerarios'),
+                           user=os.getenv('DB_USER', 'postgres'), password=os.getenv('DB_PASSWORD', '12345678'))
     cur = con.cursor()
     sql = f"insert into complexo_minerario values ({mining_complex_info['id']}, \'{mining_complex_info['nome']}\', {mining_complex_info['situacao_operacional']})"
     cur.execute(sql)
@@ -25,17 +26,21 @@ def callback(channel, method_frame, header_frame, body):
 
 
 def main():
+    rmq_host = os.getenv('RMQ_HOST', '172.17.0.2')
+    rmq_user = os.getenv('RMQ_USER', 'guest')
+    rmq_pass = os.getenv('RMQ_PASSWORD', 'guest')
     connection = pika.BlockingConnection(
         # pika.ConnectionParameters(host='localhost')
-        pika.URLParameters('amqp://guest:guest@172.17.0.2:5672/%2F')
+        # pika.URLParameters(f'amqp://{rmq_user}:{rmq_pass}@{rmq_host}:15672/%2F')
+        pika.URLParameters('amqp://admin:admin@rabbit_mq:5672/%2F')
     )
     channel = connection.channel()
 
-    channel.queue_declare(queue='mining-complex-queue', durable=True)
+    channel.queue_declare(queue=os.getenv('RMQ_QUEUE', 'mining-complex-queue'), durable=True)
 
     channel.basic_qos(prefetch_count=1)
     # channel.basic_consume('mining-complex-queue', callback, auto_ack=True)
-    channel.basic_consume('mining-complex-queue', callback)
+    channel.basic_consume(os.getenv('RMQ_QUEUE', 'mining-complex-queue'), callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
     try:

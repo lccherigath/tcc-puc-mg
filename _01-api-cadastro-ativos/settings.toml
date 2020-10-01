@@ -2,6 +2,7 @@
 DEBUG = false
 RABBITMQ_URI='amqp://guest:guest@172.17.0.2:5672/%2F'
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:12345678@172.18.0.2/mod1_ativos'
+
 SQLALCHEMY_TRACK_MODIFICATIONS = false
 SECRET_KEY = ''
 EXTENSIONS = [
@@ -19,4 +20,5 @@ DEBUG = true
 # SQLALCHEMY_DATABASE_URI = ''
 
 [production]
-# SQLALCHEMY_DATABASE_URI = ''
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:12345678@db_ativos/mod1_ativos'
+RABBITMQ_URI='amqp://admin:admin@rabbit_mq:5672/%2F'

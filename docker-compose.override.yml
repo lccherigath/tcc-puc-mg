@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  db_ativos:
+    environment:
+      - POSTGRES_PASSWORD=12345678
+
+  # api_ativos:
+  #   environment:
+  #     - SQLALCHEMY_DATABASE_URI='postgresql://postgres:12345678@db_ativos/mod1_ativos'
