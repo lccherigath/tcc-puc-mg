@@ -1,0 +1,53 @@
+name;IconStyle;longitude;latitude;municipio__id;municipio;uf;complexo_minerario
+Barragem da Cava;yellow-dot.png;-52.3789708333333;-0.897686944444445;1600808;Vitória do Jari;AP;Cadam S.a.
+Barragem do Felipe;red-dot.png;-52.3805833333333;-0.882444444444444;1600808;Vitória do Jari;AP;Cadam S.a.
+Barragem do Muriacá;red-dot.png;-52.3640833333333;-0.893666666666667;1600808;Vitória do Jari;AP;Cadam S.a.
+Barragem MCSA;yellow-dot.png;-39.8265833333333;-9.85113888888889;2909901;Curaçá;BA;Mineração Caraíba S.a.
+Dique 3;red-dot.png;-39.8249166666667;-9.83147222222222;2909901;Curaçá;BA;Mineração Caraíba S.a.
+Pilha 01 - P1C1;red-dot.png;-39.8622966666667;-9.852825;2909901;Curaçá;BA;Mineração Caraíba S.a.
+Pilha 01 - P1C5;red-dot.png;-39.8633438888889;-9.85213;2909901;Curaçá;BA;Mineração Caraíba S.a.
+PILHA 01 - PIC1A;red-dot.png;-39.8615788888889;-9.85333;2909901;Curaçá;BA;Mineração Caraíba S.a.
+PILHA01-C12;red-dot.png;-39.861645;-9.85375916666667;2909901;Curaçá;BA;Mineração Caraíba S.a.
+Dique de finos 01 - Depósito Tamanduá;red-dot.png;-47.7819766666667;-18.1508408333333;5215504;Ouvidor;GO;Catalao
+Dique de finos 02 - Depósito Tamanduá;red-dot.png;-47.7830038888889;-18.1519425;5215504;Ouvidor;GO;Catalao
+Dique de finos 03 - Depósito Tamanduá;red-dot.png;-47.7821363888889;-18.1387952777778;5215504;Ouvidor;GO;Catalao
+Unidade I;yellow-dot.png;-47.8030555555556;-18.1480555555556;5215504;Ouvidor;GO;Niobras Mineração Ltda
+Unidade IB;yellow-dot.png;-47.8061111111111;-18.1444444444444;5215504;Ouvidor;GO;Niobras Mineração Ltda
+Unidade II;yellow-dot.png;-47.8056669444444;-18.1521369444444;5215504;Ouvidor;GO;Niobras Mineração Ltda
+Unidade IIB;yellow-dot.png;-47.8113888888889;-18.1416666666667;5215504;Ouvidor;GO;Niobras Mineração Ltda
+VÃO DAS COBRAS;red-dot.png;-43.9662222222222;-6.58219444444444;2108009;Pastos Bons;MA;J. G. de A. FERREIRA MINERADORA EIRELI
+Barragem A;yellow-dot.png;-46.9461111111111;-19.6497222222222;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem A0;yellow-dot.png;-47.0293658333333;-19.610835;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem B1/B4;yellow-dot.png;-46.9963888888889;-19.6336111111111;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem B2;yellow-dot.png;-46.9738497222222;-19.6413527777778;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem B5;yellow-dot.png;-47.0211111111111;-19.6169444444444;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem E;yellow-dot.png;-46.9523219444444;-19.6502038888889;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Barragem F;yellow-dot.png;-46.9530555555556;-19.6541666666667;3104007;Araxá;MG;Mosaic Fertilizantes P&K S.A. Filial: Araxa
+Dique 01 Serra Azul - Dique Vai e Volta 1;red-dot.png;-44.4201944444444;-20.1290833333333;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique 02 Serra Azul - Dique Vai e Volta 2;red-dot.png;-44.4225;-20.1302777777778;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique 03 Serra Azul - Dique Vai e Volta 3;red-dot.png;-44.4267027777778;-20.1307361111111;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique 13 - Pains;red-dot.png;-44.4001833333333;-20.1244138888889;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique da Oficina;red-dot.png;-44.4104722222222;-20.1253333333333;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique da Oficina II;red-dot.png;-44.4135;-20.12625;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique Leste I;red-dot.png;-44.3712222222222;-20.1213888888889;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique Leste II;red-dot.png;-44.3717777777778;-20.1202222222222;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Dique Leste III;red-dot.png;-44.37125;-20.1160833333333;3140704;Mateus Leme;MG;Mineração Usiminas S.a.
+Bacia 02-03 Alto da Serra Mn;red-dot.png;-57.6166975;-19.1908094444444;5003207;Corumbá;MS;Mineração Corumbaense Reunida Sa
+Bacia 05 Alto da Serra;red-dot.png;-57.6137813888889;-19.1918402777778;5003207;Corumbá;MS;Mineração Corumbaense Reunida Sa
+Bacia 07 Alto da Serra;red-dot.png;-57.6145905555556;-19.1920363888889;5003207;Corumbá;MS;Mineração Corumbaense Reunida Sa
+Gregório;yellow-dot.png;-57.5599791666667;-19.2244466666667;5003207;Corumbá;MS;Mineração Corumbaense Reunida Sa
+Dorival;red-dot.png;-55.1861555555556;-10.8024861111111;5106190;Nova Santa Helena;MT;Alta Floresta Gold Mineração Ltda.
+Santa Helena;red-dot.png;-55.1861555555556;-10.8024861111111;5106190;Nova Santa Helena;MT;Alta Floresta Gold Mineração Ltda.
+Barragem Antas Norte;yellow-dot.png;-49.7664527777778;-6.23612222222222;1502772;Curionópolis;PA;Avb Mineração Ltda.
+Dique de Finos I;red-dot.png;-49.7465663888889;-6.24799416666667;1502772;Curionópolis;PA;Avb Mineração Ltda.
+Dique de Finos II;red-dot.png;-49.7446638888889;-6.24496527777778;1502772;Curionópolis;PA;Avb Mineração Ltda.
+Reservatório 01;red-dot.png;-63.0608611111111;-9.62227777777778;1100262;Rio Crespo;RO;White Solder Metalurgia e Mineração - Sol Nascente
+BARRAGEM 02;red-dot.png;-62.4174166666667;-11.16175;1101708;Urupá;RO;Cooperativa Mineradora dos Garimpeiros de Ariquemes
+BARRAGEM URUPA 01;red-dot.png;-62.4375277777778;-11.1354166666667;1101708;Urupá;RO;Cooperativa Mineradora dos Garimpeiros de Ariquemes
+BACIA DE DECANTAÇÃO DA USINA RIO FIORITA;yellow-dot.png;-49.4421944444444;-28.5772777777778;4217600;Siderópolis;SC;Gabriella Mineração Ltda
+CHAPADINHA 061;red-dot.png;-48.0056666666667;-23.6590833333333;3522307;Itapetininga;SP;Uilson Romanha & Cia Ltda
+Chapadinha 061 B;red-dot.png;-48.0013988888889;-23.66244;3522307;Itapetininga;SP;Uilson Romanha & Cia Ltda
+CHAPADINHA 221;red-dot.png;-47.9923611111111;-23.6515277777778;3522307;Itapetininga;SP;Uilson Romanha & Cia Ltda
+BARRAGEM GEOMINAS;red-dot.png;-47.6767333333333;-11.6474166666667;1714203;Natividade;TO;Geominas Minerações Ltda.
+BARRAGEM GEOMINAS-001;red-dot.png;-47.6761777777778;-11.6493277777778;1714203;Natividade;TO;Geominas Minerações Ltda.
+BARRAGEM GEOMINAS-002;red-dot.png;-47.6750027777778;-11.6500027777778;1714203;Natividade;TO;Geominas Minerações Ltda.
